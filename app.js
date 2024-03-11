@@ -4,13 +4,14 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger.json');
 const morgan = require('morgan');
 const mongoose = require('mongoose')
-const productRouter = require('./routers/product');
-const categoryRouter = require('./routers/categories');
-const userRouter = require('./routers/users');
-const orderRouter = require('./routers/orders');
-const authJwt = require('./helpers/jwt');
-const errorHandler = require('./helpers/error-handler');
+const productRouter = require('./src/routers/product');
+const userRouter = require('./src/routers/users');
+const orderRouter = require('./src/routers/orders');
+const authJwt = require('./config/helpers/jwt');
+const errorHandler = require('./config/helpers/error-handler');
 const cors = require('cors');
+
+const categoriaRutas = require('./src/routes/categoryRoutes');
 
 require('dotenv/config')
 
@@ -30,8 +31,8 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 //api/v1
 app.use(`${api}/orders`, orderRouter);
 app.use(`${api}/products`, productRouter);
-app.use(`${api}/categories`, categoryRouter);
 app.use(`${api}/users`, userRouter);
+app.use(`${api}/categorias`, categoriaRutas);
 
 mongoose.connect(process.env.CONNECTION_STRING, {
     dbName: 'ecommerce-js',
