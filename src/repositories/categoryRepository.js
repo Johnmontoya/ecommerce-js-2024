@@ -45,7 +45,6 @@ class CategoryRepository {
 
     async deleteCategory(categoryId){
         try {
-            console.log("repo", categoryId);
             const category = await Category.findByIdAndDelete(categoryId);
             return category;
         } catch (error) {

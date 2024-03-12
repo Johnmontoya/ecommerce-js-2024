@@ -3,9 +3,9 @@
     "info": {
         "version": "1.0.0",
         "title": "Ecommerce JS",
-        "description": "Ecommerce JS made NodeJS version 20, mongoose, mongodb",
+        "description": "Ecommerce JS hecho con NodeJS version 20, mongoose, mongodb",
         "contact": {
-            "name": "Ecommerce with Swagger API",
+            "name": "Ecommerce con Swagger API",
             "email": "johnmontoya777@hotmail.com",
             "url": "https://github.com/Johnmontoya"
         },
@@ -21,13 +21,13 @@
         }
     ],
     "paths": {
-        "/api/v1/categories": {
+        "/api/v1/categorias": {
             "get": {
-                "summary": "Get all categories",
-                "description": "Return all categories from the database",
+                "summary": "Obtener todas las categorias",
+                "description": "Retorna toda las categorias guardadas en la base de datos",
                 "responses": {
                     "200": {
-                        "description": "A list of categories",
+                        "description": "Lista todas las categorias",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -52,8 +52,8 @@
                 }
             },
             "post": {
-                "summary": "Create a category",
-                "description": "Create a category and save in the database",
+                "summary": "Crea una nueva categoria",
+                "description": "Crea una categoria y la guarda en la base de datos",
                 "operationId": "addCategory",
                 "requestBody": {
                     "required": true,
@@ -66,7 +66,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Category response",
                         "content": {
                             "application/json": {
@@ -76,8 +76,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Name, icon, and color are required fields"
+                    "404": {
+                        "description": "Name, icon, y color son campos requeridos"
                     },
                     "500": {
                         "description": "Error internal server",
@@ -92,15 +92,15 @@
                 }
             }
         },
-        "/api/v1/categories/{id}": {
+        "/api/v1/categorias/{id}": {
             "get": {
-                "summary": "Get one category by ID",
-                "description": "Return a category on a single ID",
+                "summary": "Obtiene una categoria por ID",
+                "description": "Retorna una categoria por ID",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of category to fetch",
+                        "description": "ID de la categoria a buscar",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -109,7 +109,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Retrieve one category",
+                        "description": "Recupera una categoria",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -119,7 +119,7 @@
                         }
                     },
                     "404": {
-                        "description": "Category not found"
+                        "description": "Category no encontrada"
                     },
                     "500": {
                         "description": "Error internal server",
@@ -134,13 +134,13 @@
                 }
             },
             "put": {
-                "summary": "Update a category by ID",
-                "description": "Update one category from JSON",
+                "summary": "Actualiza una categoria por ID",
+                "description": "Actualiza una categoria almacenada en la base de datos",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of category to fetch",
+                        "description": "ID de la categoria a buscar",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -169,10 +169,10 @@
                         }
                     },
                     "400": {
-                        "description": "Name, icon, and color are required fields"
+                        "description": "Name, icon, y color son campos requeridos"
                     },
                     "404": {
-                        "description": "Category not found or cannot be updated"
+                        "description": "Category no encontrada o actualizada"
                     },
                     "500": {
                         "description": "Error internal server",
@@ -187,13 +187,13 @@
                 }
             },
             "delete": {
-                "summary": "Delete one category by ID",
-                "description": "Delete a category of the database",
+                "summary": "Borrar una categoria por ID",
+                "description": "Borra una categoria de la base de datos",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of category to fetch",
+                        "description": "ID de la categoria a buscar",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -202,10 +202,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "the category has been deleted"
+                        "description": "La categoria ha sido borrada"
                     },
                     "404": {
-                        "description": "category not found"
+                        "description": "Category no encontrada"
                     },
                     "500": {
                         "description": "Error internal server",
@@ -314,11 +314,11 @@
         },
         "/api/v1/users": {
             "get": {
-                "summary": "Get all users",
-                "description": "Return all users from the database",
+                "summary": "Obtiene todos los usuario",
+                "description": "Retorna todos los usuarios de la base de datos",
                 "responses": {
                     "200": {
-                        "description": "A list of users",
+                        "description": "Lista todos los usuarios",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -331,7 +331,47 @@
                         }
                     },
                     "404": {
-                        "description": "Users not found"
+                        "description": "Usuario no encontrado"
+                    },
+                    "500": {
+                        "description": "Error internal server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Crea una nuevo usuario",
+                "description": "Crea un usuario y lo guarda en la base de datos",
+                "operationId": "addCUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Name, email, password, y phone son campos requeridos"
                     },
                     "500": {
                         "description": "Error internal server",
@@ -348,13 +388,13 @@
         },
         "/api/v1/users/{id}": {
             "get": {
-                "summary": "Get one user by ID",
-                "description": "Return a user on a single ID",
+                "summary": "Obtiene un usuario por ID",
+                "description": "Retorn un usuario por ID",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of user to fetch",
+                        "description": "ID del usuario a buscar",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -363,7 +403,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Retrieve one user",
+                        "description": "Recupera un usuario",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -373,7 +413,93 @@
                         }
                     },
                     "404": {
-                        "description": "The user with the given ID was not found"
+                        "description": "Usuario no encontrado"
+                    },
+                    "500": {
+                        "description": "Error internal server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Actualiza un usuario por ID",
+                "description": "Actualiza un usuario almacenado en la base de datos",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario a buscar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Name, email, password, y phone son campos requeridos"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado o actualizado"
+                    },
+                    "500": {
+                        "description": "Error internal server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Borrar un usuario por ID",
+                "description": "Borra un usuario de la base de datos",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del usuario a buscar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario eliminado"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
                     },
                     "500": {
                         "description": "Error internal server",
@@ -442,17 +568,17 @@
                 "properties": {                               
                     "name": {
                         "type": "string",
-                        "description": "The categories's name",
+                        "description": "Nombre de la categoria",
                         "example": "mobile"
                     },
                     "icon": {
                         "type": "string",
-                        "description": "The categories's icon",
+                        "description": "Icono de la categoria",
                         "example": "mobile" 
                     },
                     "color": {
                         "type": "string",
-                        "description": "The categories's color",
+                        "description": "Color de la categoria en hexadecimal",
                         "example": "#F0E4E1" 
                     }
                 }
@@ -606,56 +732,56 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The username",
+                        "description": "Nombre de usuario",
                         "nullable": false,
                         "example": "John Doe"
                     },
                     "email": {
                         "type": "string",
-                        "description": "The email of the user",
+                        "description": "Email del usuario",
                         "nullable": false,
                         "example": "JohnDoe@gmail.com"
                     },
-                    "passwordHash": {
+                    "password": {
                         "type": "string",
-                        "description": "A short password",
+                        "description": "Contraseña del usuario",
                         "nullable": false,
                         "example": "********"
                     },
                     "phone": {
                         "type": "string",
-                        "description": "The cellphone number",
+                        "description": "Número de teléfono",
                         "nullable": false,
                         "example": "+573043625637"
                     },
                     "isAdmin": {
                         "type": "boolean",
-                        "description": "User role",
-                        "example": "true or false"
+                        "description": "Rol de usuario",
+                        "example": true
                     },
                     "street": {
                         "type": "string",
-                        "description": "User address",
+                        "description": "Dirección de usuario",
                         "example": "Kra 9 #13A"
                     },
                     "apartment": {
                         "type": "string",
-                        "description": "Apartment number and hotel",
+                        "description": "Número de habitación y hotel",
                         "example": "Room 32 hotel StarCity"
                     },
                     "zip": {
                         "type": "string",
-                        "description": "The code of the town",
+                        "description": "Zip de la localidad",
                         "example": "190531"
                     },
                     "city": {
                         "type": "string",
-                        "description": "The city of residence",
+                        "description": "Ciudad de residencia",
                         "example": "New york"
                     },
                     "country": {
                         "type": "string",
-                        "description": "Country of residence",
+                        "description": "Pais de residencia",
                         "example": "Mexico"
                     }
                 }

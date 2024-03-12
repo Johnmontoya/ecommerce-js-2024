@@ -63,7 +63,7 @@ async function updateCategory(req, res){
 
 async function deleteCategory(req, res){
     try {
-        const categoryId= req.params.id;        
+        const categoryId = req.params.id;        
         await categoryService.deleteCategory(categoryId);
         res.status(200).json({
             message: "Categoria eliminada"
