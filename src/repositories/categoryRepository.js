@@ -39,7 +39,7 @@ class CategoryRepository {
                 { new: true });
             return updateCategory;
         } catch (error) {
-            throw new Error('Error al obtener la categoria: ' + error.message);
+            throw new Error('Error al actualizar la categoria: ' + error.message);
         }
     }
 
@@ -48,7 +48,7 @@ class CategoryRepository {
             const category = await Category.findByIdAndDelete(categoryId);
             return category;
         } catch (error) {
-            throw new Error('Error al obtener la categoria: ' + error.message);
+            throw new Error('Error al eliminar la categoria: ' + error.message);
         }
     }
 }

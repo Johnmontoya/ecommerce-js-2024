@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000 --detectOpenHandles"
+    "test": "jest"
   },
   "keywords": [],
   "author": "John Montoya",
@@ -33,9 +33,6 @@
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/bootstrap.js"
     ]
   }
 }

@@ -28,7 +28,7 @@ async function getCategories(req, res){
 async function getCategory(req, res) {
     try {
         const categoryId = req.params.id;
-        const category = await categoryService.getCaregoryById(categoryId);
+        const category = await categoryService.getCategoryById(categoryId);
         res.json(category);
     } catch (error) {
         res.status(404).json({

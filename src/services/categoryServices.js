@@ -19,7 +19,7 @@ class CategoryService {
         return categories;
     }
 
-    async getCaregoryById(categoryId){
+    async getCategoryById(categoryId){
         const category = await this.categoryRepository.getCategoryById(categoryId);
         if(!category){
             throw new Error('Categoria no encontrada');
