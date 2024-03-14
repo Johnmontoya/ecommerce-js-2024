@@ -5,8 +5,8 @@ const swaggerSpec = require('./docs/swagger.json');
 const morgan = require('morgan');
 const mongoose = require('mongoose')
 const productRouter = require('./src/routes/productRoutes');
-const userRutas = require('./src/routes/userRoutes');
-const orderRouter = require('./src/routers/orders');
+const userRouter = require('./src/routes/userRoutes');
+const orderRouter = require('./src/routes/orderRoutes');
 const authJwt = require('./config/helpers/jwt');
 const errorHandler = require('./config/helpers/error-handler');
 const cors = require('cors');
@@ -31,7 +31,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 //api/v1
 app.use(`${api}/orders`, orderRouter);
 app.use(`${api}/products`, productRouter);
-app.use(`${api}/users`, userRutas);
+app.use(`${api}/users`, userRouter);
 app.use(`${api}/categorias`, categoriaRutas);
 
 mongoose.connect(process.env.CONNECTION_STRING, {
