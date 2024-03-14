@@ -1095,6 +1095,98 @@
                     }
                 }
             }
+        },
+        "/api/v1/users/get/count": {
+            "get": {
+                "summary": "Obtener el número de usuarios",
+                "description": "Retorna el número de usuarios registrados en la base de datos",
+                "responses": {
+                    "200": {
+                        "description": "Retorna un entero",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ocurrió un problema con el conteo"
+                    },
+                    "500": {
+                        "description": "Error internal server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/login": {
+            "post": {
+                "summary": "Login usuario",
+                "description": "Ingresa las credenciales para acceder a la plataforma",
+                "operationId": "loginCUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "JohnDoe@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "user": {
+                                            "type": "string",
+                                            "example": "JohnDoe@gmail.com"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Email incorrecto | contraseña incorrecta"
+                    },
+                    "500": {
+                        "description": "Error internal server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {

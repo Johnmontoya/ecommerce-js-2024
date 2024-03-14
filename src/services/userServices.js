@@ -27,6 +27,21 @@ class UserService {
         return user;
     }
 
+    async getCount(){
+        const user = await this.userRepository.getCountUsers();
+        if(!user){
+            throw new Error('Ocurrió un problema con el conteo')
+        }
+        return user;
+    }
+    async emailUser(email){
+        const user = await this.userRepository.loginEmail(email);
+        if(!user){
+            throw new Error('Email incorrecto')
+        }
+        return user;
+    }
+
     async updateUser(userId, userData){
         const user = await this.userRepository.updateUser(userId, userData);
         if(!user){

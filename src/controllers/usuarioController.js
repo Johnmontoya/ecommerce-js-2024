@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const UsuarioService = require('../services/userServices');
 
 const usuarioService = new UsuarioService();
@@ -85,6 +86,43 @@ async function getUser(req, res){
     }
 }
 
+async function getUserCount(req, res){
+    try {
+        const user = await usuarioService.getCount();
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
+async function login(req, res) {
+    try {
+        const user = await usuarioService.emailUser(req.body.email);
+        const secret = process.env.SECRET;
+        if(user && bcrypt.compareSync(req.body.password, user.passwordHash)){
+            const token = jwt.sign({
+                userId: user.id,
+                isAdmin: user.isAdmin
+            }, secret, { expiresIn: '1d'});
+            res.status(200).json({
+                user: user.email,
+                token: token
+            });
+        } else {
+            res.status(400).json({
+                message: 'Contraseña incorrecta'
+            })
+        }
+        
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
 async function updateUser(req, res) {
     try {
         const userId = req.params.id;
@@ -157,6 +195,8 @@ module.exports = {
     createUser,
     getUsers,
     getUser,
+    getUserCount,
+    login,
     updateUser,
     deleteUser
 }

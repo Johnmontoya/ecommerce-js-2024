@@ -1,4 +1,6 @@
 const { User } = require('../models/user');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 class UserRepository {
     async createUser(userData){
@@ -25,6 +27,24 @@ class UserRepository {
             return user;
         } catch (error) {
             throw new Error('Error al obtener el usuario: ' + error.message);
+        }
+    }
+
+    async getCountUsers(){
+        try {
+            const userDocuments = await User.countDocuments();
+            return userDocuments;
+        } catch (error) {
+            throw new Error('Error al obtener el número total de usuarios: ' + error.message);
+        }
+    }
+
+    async loginEmail(emailUser){
+        try {
+            const user = await User.findOne({ email: emailUser})
+            return user;
+        } catch (error) {
+            throw new Error('Error al obtener la información del usuario: ' + error.message);
         }
     }
 
