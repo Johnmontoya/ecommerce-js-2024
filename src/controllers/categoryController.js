@@ -6,7 +6,7 @@ async function createCategory(req, res) {
     try {
         const categoryData = req.body;
         const newCategory = await categoryService.registerCategory(categoryData);
-        res.json(newCategory);
+        res.status(201).json(newCategory);
     } catch (error) {
         res.status(500).json({
             error: error.message
@@ -17,9 +17,9 @@ async function createCategory(req, res) {
 async function getCategories(req, res){
     try {
         const categories = await categoryService.getCategories();
-        res.json(categories);
+        res.status(200).json({categories: categories});
     } catch (error) {
-        res.status(404).json({
+        res.status(500).json({
             error: error.message
         })
     }
@@ -29,7 +29,7 @@ async function getCategory(req, res) {
     try {
         const categoryId = req.params.id;
         const category = await categoryService.getCategoryById(categoryId);
-        res.json(category);
+        res.json({category: category});
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -43,7 +43,7 @@ async function updateCategory(req, res){
         const { name, icon, color } = req.body;
 
         if (!name || !icon || !color) {
-            return res.status(400).json({ message: 'Name, icon, and color are required fields' });
+            return res.status(404).json({ message: 'Name, icon, and color are required fields' });
         }
 
         let categoryData = {
@@ -53,7 +53,7 @@ async function updateCategory(req, res){
         }
 
         const category = await categoryService.updateCategory(categoryId, categoryData)
-        res.json(category);
+        res.status(200).json({category: category});
     } catch (error) {
         res.status(404).json({
             error: error.message

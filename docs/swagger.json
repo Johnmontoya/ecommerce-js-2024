@@ -292,7 +292,7 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Product response",
                         "content": {
                             "application/json": {
@@ -1194,27 +1194,39 @@
             "Category": {
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/NewCategory"
-                    },
-                    {
                         "type": "object",
-                        "required": [
-                            "id"
-                        ]
+                        "properties": {
+                            "categories": {
+                                "type": "array",
+                                "$ref": "#/components/schemas/NewCategory"
+                            }
+                        }
                     }
                 ]
             },
             "Product" : {
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/NewProduct"
+                        "type": "object",
+                        "properties": {
+                            "products": {
+                                "type": "array",
+                                "$ref": "#/components/schemas/NewProduct"
+                            }
+                        }
                     }
                 ]
             },
             "Order": {
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/NewOrder"
+                        "type": "object",
+                        "properties": {
+                            "orders": {
+                                "type": "array",
+                                "$ref": "#/components/schemas/NewOrder"
+                            }
+                        }
                     },
                     {
                         "type": "object",
@@ -1227,7 +1239,13 @@
             "User": {
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/NewUser"
+                        "type": "object",
+                        "properties": {
+                            "users": {
+                                "type": "array",
+                                "$ref": "#/components/schemas/NewUser"
+                            }
+                        }
                     },
                     {
                         "type": "object",
@@ -1282,7 +1300,11 @@
                         "example": "https://m.media-amazon.com/images/I/91ZRYZkh4CL._AC_SX466_.jpg"
                     },
                     "images": {
-                        "$ref": "#/components/schemas/Images"
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary"
+                        }
                     },
                     "brand": {
                         "type": "string",

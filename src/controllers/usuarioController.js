@@ -55,7 +55,7 @@ async function createUser(req, res){
         };
 
         const newUser = await usuarioService.registerUser(userData);
-        res.json(newUser)
+        res.status(201).json(newUser)
     } catch (error) {
         res.status(500).json({
             error: error.message
@@ -66,9 +66,11 @@ async function createUser(req, res){
 async function getUsers(req, res){
     try {
         const users = await usuarioService.getUser();
-        res.json(users);
+        res.status(200).json({
+            users: users
+        });
     } catch (error) {
-        res.status(404).json({
+        res.status(500).json({
             error: error.message
         })
     }
@@ -78,7 +80,9 @@ async function getUser(req, res){
     try {
         const userId = req.params.id;
         const user = await usuarioService.getUserId(userId);
-        res.json(user);
+        res.status(200).json({
+            user: user
+        });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -89,7 +93,22 @@ async function getUser(req, res){
 async function getUserCount(req, res){
     try {
         const user = await usuarioService.getCount();
-        res.status(200).json(user);
+        res.status(200).json({
+            count: user
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
+async function getEmail(req, res){
+    try {
+       const user = await usuarioService.emailUser(req.body.email);
+       res.status(200).json({
+        user: user
+       })
     } catch (error) {
         res.status(500).json({
             error: error.message
@@ -106,7 +125,7 @@ async function login(req, res) {
                 userId: user.id,
                 isAdmin: user.isAdmin
             }, secret, { expiresIn: '1d'});
-            res.status(200).json({
+            res.status(200).header('authToken', token).json({
                 user: user.email,
                 token: token
             });
@@ -169,7 +188,9 @@ async function updateUser(req, res) {
         };
 
         const user = await usuarioService.updateUser(userId, userData);
-        res.json(user);
+        res.status(200).json({
+            user: user
+        });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -196,6 +217,7 @@ module.exports = {
     getUsers,
     getUser,
     getUserCount,
+    getEmail,
     login,
     updateUser,
     deleteUser

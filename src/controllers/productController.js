@@ -55,7 +55,7 @@ async function createProduct(req, res){
             };
 
             const newProduct = await productServices.registerProduct(productData);
-            res.json(newProduct);
+            res.status(201).json(newProduct);
         })
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -83,7 +83,7 @@ async function getProducts(req, res){
         }
 
         const products = await productServices.getProducts(filter, limit);
-        res.json(products);
+        res.status(200).json({products: products});
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -95,7 +95,7 @@ async function getProduct(req, res){
     try {
         const productId = req.params.id;
         const product = await productServices.getProductById(productId);
-        res.json(product);
+        res.status(200).json({ product: product });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -107,7 +107,9 @@ async function updatedProduct(req, res){
     try {
         const productId = req.params.id;
         if(!mongoose.isValidObjectId(productId)){
-            return res.status(400).send('ID invalido')
+            return res.status(400).json({
+                error: 'ID invalido'
+            })
         }
 
         uploadOptions.single('image')(req, res, async(err) => {
@@ -121,7 +123,7 @@ async function updatedProduct(req, res){
 
             const file = req.file;
 
-            if(!file) return res.status(400).send('Una imagen es requerida');
+            if(!file) return res.status(400).json({ error: 'Una imagen es requerida'});
 
             if(file) {
                 const existingImage = await productServices.getProductById(productId);                
@@ -162,7 +164,9 @@ async function deleteProduct(req, res){
         const productId = req.params.id;
 
         if(!mongoose.isValidObjectId(productId)){
-            return res.status(400).send('ID invalido')
+            return res.status(400).json({
+                error: 'ID invalido'
+            })
         }
 
         const existingImage = await productServices.getProductById(productId);
@@ -208,7 +212,7 @@ async function deleteProduct(req, res){
 async function getCountProduct(req, res) {
     try {
         const product = await productServices.getCount();
-        res.json(product);
+        res.status(200).json({ product: product });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -220,7 +224,7 @@ async function getFeaturedProduct(req, res) {
     try {
         const count = req.params.count ? req.params.count : 0;
         const product = await productServices.getFeatured(count);
-        res.json(product);
+        res.status(200).json({ product: product });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -232,7 +236,9 @@ async function updatedGalleryImages(req, res){
     try {
         const productId = req.params.id;
         if(!mongoose.isValidObjectId(productId)){
-            return res.status(400).send('ID invalido')
+            return res.status(400).json({
+                error: 'ID invalido'
+            })
         }
 
         uploadOptions.array('images', 10)(req, res, async(err) => {

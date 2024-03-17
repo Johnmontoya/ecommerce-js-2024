@@ -1,17 +1,17 @@
 const express = require('express')
 const app = express();
 const swaggerUI = require('swagger-ui-express');
-const swaggerSpec = require('./docs/swagger.json');
+const swaggerSpec = require('../docs/swagger.json');
 const morgan = require('morgan');
 const mongoose = require('mongoose')
-const productRouter = require('./src/routes/productRoutes');
-const userRouter = require('./src/routes/userRoutes');
-const orderRouter = require('./src/routes/orderRoutes');
-const authJwt = require('./config/helpers/jwt');
-const errorHandler = require('./config/helpers/error-handler');
+const productRouter = require('./routes/productRoutes');
+const userRouter = require('./routes/userRoutes');
+const orderRouter = require('./routes/orderRoutes');
+const authJwt = require('../config/helpers/jwt');
+const errorHandler = require('../config/helpers/error-handler');
 const cors = require('cors');
 
-const categoriaRutas = require('./src/routes/categoryRoutes');
+const categoriaRutas = require('./routes/categoryRoutes');
 
 require('dotenv/config')
 
@@ -34,7 +34,7 @@ app.use(`${api}/products`, productRouter);
 app.use(`${api}/users`, userRouter);
 app.use(`${api}/categorias`, categoriaRutas);
 
-mongoose.connect(process.env.CONNECTION_STRING, {
+/*mongoose.connect(process.env.CONNECTION_STRING, {
     dbName: 'ecommerce-js',
 })
 .then(() => {
@@ -45,6 +45,6 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 
 app.listen(3000, () => {    
     console.log('server is running en localhost:3000');
-})
+})*/
 
 module.exports = app;
