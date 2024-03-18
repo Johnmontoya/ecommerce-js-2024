@@ -1,45 +1,38 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const { Category } = require('../../src/models/category');
+const factory = require('../../utils/factory/factory.fake');
 
 require('dotenv').config();
 
 const url = process.env.API_URL
 let category;
 beforeEach(async() => {
-    category = await Category.create({
-        name: 'Informatica y electronica',
-        icon: 'computer',
-        color: '#443443'
-    }, {
-        name: 'Moda',
-        icon: 'dress',
-        color: '#443443'
-    })
+    category = await factory.createMany('category', 2);
 })
 
 describe("Categorias controller", () => {
     describe(`POST ${url}/categorias`, () => {
         it('Deberia almacenar en la base de datos la nueva categoria', async() => {
             try{
+                const data = await factory.create('category');
                 const response = await request(app)
                     .post(`${url}/categorias`)
                     .set('content-type', 'application/json')
                     .send({
-                        name: "Moda",
-                        icon: "dress",
-                        color: "#443443"
+                        name: data.name,
+                        icon: data.icon,
+                        color: data.color
                     });
-                
+                //console.log(data)
                 expect(response.statusCode).toBe(201);
 
                 //Eliminar el id, ya que se genera un valor automatico aleatorio en la base de datos
                 const { _id, ...expectedBody } = response.body;
 
                 expect(expectedBody).toEqual({
-                    name: "Moda",
-                    icon: "dress",
-                    color: "#443443",
+                    name: expectedBody.name,
+                    icon: expectedBody.icon,
+                    color: expectedBody.color,
                     "__v": 0
                 });
             } catch(error){
@@ -80,9 +73,9 @@ describe("Categorias controller", () => {
 
                 //Verificar que los datos que se obtienen son los correctos
                 expect(expectedBody).toEqual({
-                    name: 'Moda',
-                    icon: 'dress',
-                    color: '#443443',
+                    name: expectedBody.name,
+                    icon: expectedBody.icon,
+                    color: expectedBody.color,
                     "__v": 0
                 })
             } catch(error){
@@ -110,12 +103,13 @@ describe("Categorias controller", () => {
     describe(`PUT ${url}/categorias/:id`, () => {
         it('Deberia actualizar los datos de la categoria seleccionada por su ID', async() => {
             try{
+                const data = await factory.create('category');
                 const update = await request(app)
                     .put(`${url}/categorias/${category[0].id}`)
                     .send({
-                        name: "Home",
-                        icon: "house",
-                        color: "#443455"
+                        name: data.name,
+                        icon: data.icon,
+                        color: data.color
                     })
                     .set('content-type', 'application/json');
                 expect(update.statusCode).toBe(200);
@@ -124,9 +118,9 @@ describe("Categorias controller", () => {
                 const { _id, ...expectedBody } = update.body.category;
 
                 expect(expectedBody).toEqual({
-                    name: "Home",
-                    icon: "house",
-                    color: "#443455",
+                    name: expectedBody.name,
+                    icon: expectedBody.icon,
+                    color: expectedBody.color,
                     "__v": 0
                 })
             }catch(error){

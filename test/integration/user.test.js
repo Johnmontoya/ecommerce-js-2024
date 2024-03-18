@@ -1,35 +1,15 @@
 const request = require('supertest');
 const bcrypt = require('bcryptjs');
 const app = require('../../src/app');
-const { User } = require('../../src/models/user');
+const factory = require('../../utils/factory/factory.fake');
 
 require('dotenv').config();
 
 const url = process.env.API_URL
 let user;
 beforeEach(async() => {    
-    user = await User.create({
-        name: "John Doe Travolta",
-        email: "JohnDoe@gmail.com",
+    user = await factory.createMany('user', 2, {
         passwordHash: bcrypt.hashSync('pacoelflaco', 10),
-        phone: "+573043625637",
-        isAdmin: true,
-        street: "Kra 9 #13A",
-        apartment: "Room 32 hotel StarCity",
-        zip: "190531",
-        city: "New york",
-        country: "Mexico"
-    },{
-        name: "Arnold Stallone",
-        email: "Arnold@gmail.com",
-        passwordHash: bcrypt.hashSync('terminator', 10),
-        phone: "+573123625637",
-        isAdmin: true,
-        street: "Kra 10 #13A",
-        apartment: "Room 27 hotel StarCity",
-        zip: "190531",
-        city: "New york",
-        country: "Australia"
     });
 });
 
@@ -38,21 +18,25 @@ describe("Users controller", () => {
     describe(`POST ${url}/users`, () => {
         it('Deberia crear un nuevo usuario y retornar  code http: 201', async() => {
             try{
+                const data = await factory.create('user', {
+                    passwordHash: bcrypt.hashSync('pacoelflaco', 10)
+                });
                 const user = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', "application/json")
                     .send({
-                        name: "John Doe Travolta",
-                        email: "JohnDoe@hotmail.com",
-                        password: "pacoelflaco",
-                        phone: "+573043625637",
+                        name: data.name,
+                        email: data.email,
+                        password: data.passwordHash,
+                        phone: data.phone,
                         isAdmin: true,
-                        street: "Kra 9 #13A",
-                        apartment: "Room 32 hotel StarCity",
-                        zip: "190531",
-                        city: "New york",
-                        country: "Mexico"
+                        street: data.street,
+                        apartment: data.apartment,
+                        zip: data.zip,
+                        city: data.city,
+                        country: data.country
                     });
+                //console.log(user.body)
                 expect(user.statusCode).toBe(201);
             } catch (error) {
                 console.error('Error en la prueba:', error);
@@ -125,20 +109,23 @@ describe("Users controller", () => {
     describe(`PUT ${url}/users/:id`, () => {
         it('Deberia actualizar los datos del usuario y retornar el code http: 200', async() => {
             try {
+                const data = await factory.create('user', {
+                    passwordHash: bcrypt.hashSync('pacoelflaco', 10)
+                });      
                 const response = await request(app)
                     .put(`${url}/users/${user[0].id}`)
                     .set('content-type', 'application/json')
                     .send({
-                        name: 'John Travolta',
-                        email: 'johntravolta@gmail.com',
-                        password: "pacoelflaco",
-                        phone: "+573043625637",
+                        name: data.name,
+                        email: data.email,
+                        password: data.passwordHash,
+                        phone: data.phone,
                         isAdmin: true,
-                        street: "Kra 9 #13A",
-                        apartment: "Room 32 hotel StarCity",
-                        zip: "190531",
-                        city: "New york",
-                        country: "Mexico"
+                        street: data.street,
+                        apartment: data.apartment,
+                        zip: data.zip,
+                        city: data.city,
+                        country: data.country
                     });
                 
                 expect(response.statusCode).toBe(200);
@@ -151,20 +138,23 @@ describe("Users controller", () => {
 
         it('Deberia retornar 404 si el usuario con el ID no existe', async() => {
             try{
+                const data = await factory.create('user', {
+                    passwordHash: bcrypt.hashSync('pacoelflaco', 10)
+                });
                 const update = await request(app)
                 .put(`${url}/users/639c80ef98284bfdf111ad09}`)
                 .set('content-type', 'application/json')
                 .send({
-                    name: 'John Travolta',
-                    email: 'johntravolta@gmail.com',
-                    password: "pacoelflaco",
-                    phone: "+573043625637",
+                    name: data.name,
+                    email: data.email,
+                    password: data.passwordHash,
+                    phone: data.phone,
                     isAdmin: true,
-                    street: "Kra 9 #13A",
-                    apartment: "Room 32 hotel StarCity",
-                    zip: "190531",
-                    city: "New york",
-                    country: "Mexico"
+                    street: data.street,
+                    apartment: data.apartment,
+                    zip: data.zip,
+                    city: data.city,
+                    country: data.country
                 });
             
                 //console.log(categoria.body);
@@ -178,19 +168,11 @@ describe("Users controller", () => {
     })
 
     describe(`POST ${url}/users/login`, () => {
+        let data;
         beforeEach(async() => {    
-            user = await User.create({
-                name: "Alejandro Magno",
-                email: "magno@gmail.com",
+            data = await factory.create('user', {
                 passwordHash: bcrypt.hashSync('pacoelflaco', 10),
-                phone: "+573243625637",
-                isAdmin: true,
-                street: "Kra 12 #13A",
-                apartment: "Room 33 hotel StarCity",
-                zip: "192531",
-                city: "Chicago",
-                country: "China"
-            })
+            });
         })
 
         it('Deberia el usuario poder loguear con sus credenciales y retornar un token', async() => {
@@ -199,7 +181,7 @@ describe("Users controller", () => {
                     .post(`${url}/users/login`)
                     .set('content-type', 'application/json')
                     .send({
-                        email: 'magno@gmail.com',
+                        email: data.email,
                         password: 'pacoelflaco'
                     });
 
@@ -232,8 +214,8 @@ describe("Users controller", () => {
         it('Deberia retornar 404 si el usuario con el ID no existe', async() => {
             try{
                 const response = await request(app)
-                .delete(`${url}/users/639c80ef98284bfdf111ad09}`)
-                .set('content-type', 'application/json')
+                    .delete(`${url}/users/639c80ef98284bfdf111ad09}`)
+                    .set('content-type', 'application/json')
             
                 //console.log(categoria.body);
                 expect(response.statusCode).toBe(404);

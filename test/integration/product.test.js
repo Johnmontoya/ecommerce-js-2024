@@ -2,37 +2,14 @@ const request = require('supertest');
 const app = require('../../src/app');
 const path = require('path');
 const { Product } = require('../../src/models/product');
+const factory = require('../../utils/factory/factory.fake');
 
 require('dotenv').config();
 
 const url = process.env.API_URL
 let product;
 beforeEach(async() => {
-  product = await Product.create({
-    name: 'Patriot Viper RAM DDR4',
-    description: "RAM con RBG DDR4 para pc desktop",
-    richDescription: 'Modulo DDR4 de 8GB(1x8GB) 3200Mhz',
-    image: '',
-    brand: 'patriot',
-    category: '5f15d54cf3a046427a1c26e3',
-    price: 25.00,
-    countInStock: 30,
-    rating: 3,
-    numReviews: 230,
-    isFeatured: true
-  },{
-    name: 'Kingstone Fury RAM DDR4',
-    description: "RAM con RBG DDR4 para pc desktop",
-    richDescription: 'Modulo DDR4 de 8GB(1x8GB) 5600Mhz',
-    image: '',
-    brand: 'Kingstone',
-    category: '5f15d54cf3a046427a1c26e3',
-    price: 28.99,
-    countInStock: 50,
-    rating: 4,
-    numReviews: 330,
-    isFeatured: false
-  })
+  product = await factory.createMany('product', 2)
 })
 
 describe("Productos controller", () => {
@@ -40,37 +17,41 @@ describe("Productos controller", () => {
         it('Deberia almacenar en la base de datos el nuevo producto y devolver code 200', async () => {
             try {
                 const imagePath = path.resolve(__dirname, '../../public/images/logo.jpg'); // Ajusta la ruta de la imagen
-                
+                const data = await factory.create('product');                
+
+                //convertimos la funcion resultado a string
+                let convertFn = data.category.toString();
+
                 const response = await request(app)
                     .post(`${url}/products`)
                     .attach('image', imagePath)
-                    .field('name', 'Kingstone HyperX RAM DDR4')
-                    .field('description', 'RAM con RBG DDR3 para pc desktop')
-                    .field('richDescription', 'Modulo DDR3 de 8GB(1x8GB) 5600Mhz')
-                    .field('brand', 'Kingstone')
-                    .field('category', '5f15d54cf3a046427a1c26e3')
-                    .field('price', 21.99)
-                    .field('countInStock', 40)
-                    .field('rating', 4.5)
-                    .field('numReviews', 530)
+                    .field('name', data.name)
+                    .field('description', data.description)
+                    .field('richDescription', data.richDescription)
+                    .field('brand', data.brand)
+                    .field('category', convertFn)
+                    .field('price', data.price)
+                    .field('countInStock', data.countInStock)
+                    .field('rating', data.rating)
+                    .field('numReviews', data.numReviews)
                     .field('isFeatured', true);
     
-                //console.log(response.body)
+                console.log(data)
                 expect(response.statusCode).toBe(201);
     
                 // Eliminar el id, ya que se genera automáticamente en la base de datos
                 const { _id, dateCreated, image, images, ...expectedBody } = response.body;
     
                 expect(expectedBody).toEqual({
-                    name: 'Kingstone HyperX RAM DDR4',
-                    description: "RAM con RBG DDR3 para pc desktop",
-                    richDescription: 'Modulo DDR3 de 8GB(1x8GB) 5600Mhz',
-                    brand: 'Kingstone',
-                    category: '5f15d54cf3a046427a1c26e3',
-                    price: 21.99,
-                    countInStock: 40,
-                    rating: 4.5,
-                    numReviews: 530,
+                    name: expectedBody.name,
+                    description: expectedBody.description,
+                    richDescription: expectedBody.richDescription,
+                    brand: expectedBody.brand,
+                    category: expectedBody.category,
+                    price: expectedBody.price,
+                    countInStock: expectedBody.countInStock,
+                    rating: expectedBody.rating,
+                    numReviews: expectedBody.numReviews,
                     isFeatured: true,
                     __v: 0
                 });
@@ -113,15 +94,15 @@ describe("Productos controller", () => {
 
                 //Verificar que los datos que se obtienen son los correctos
                 expect(expectedBody).toEqual({
-                    name: 'Patriot Viper RAM DDR4',
-                    description: "RAM con RBG DDR4 para pc desktop",
-                    richDescription: 'Modulo DDR4 de 8GB(1x8GB) 3200Mhz',
-                    brand: 'patriot',
-                    category: null,
-                    price: 25.00,
-                    countInStock: 30,
-                    rating: 3,
-                    numReviews: 230,
+                    name: expectedBody.name,
+                    description: expectedBody.description,
+                    richDescription: expectedBody.richDescription,
+                    brand: expectedBody.brand,
+                    category: expectedBody.category,
+                    price: expectedBody.price,
+                    countInStock: expectedBody.countInStock,
+                    rating: expectedBody.rating,
+                    numReviews: expectedBody.numReviews,
                     isFeatured: true,
                     __v: 0
                 })
@@ -151,19 +132,23 @@ describe("Productos controller", () => {
         it('Deberia actualizar los datos seleccionados por su ID', async() => {
             try {
                 const imagePath = path.resolve(__dirname, '../../public/images/logo.jpg'); // Ajusta la ruta de la imagen
+                const data = await factory.create('product');                
+
+                //convertimos la funcion resultado a string
+                let convertFn = data.category.toString();
 
                 const update = await request(app)
                     .put(`${url}/products/${product[0].id}`)
                     .attach('image', imagePath)
-                    .field('name', 'Corsair Vengeance RAM DDR4')
-                    .field('description', 'RAM con RBG DDR4 para pc desktop')
-                    .field('richDescription', 'Modulo DDR4 de 8GB(1x8GB) 5600Mhz')
-                    .field('brand', 'Corsair')
-                    .field('category', '5f15d54cf3a046427a1c26e3')
-                    .field('price', 31.99)
-                    .field('countInStock', 30)
-                    .field('rating', 4.7)
-                    .field('numReviews', 632)
+                    .field('name', data.name)
+                    .field('description', data.description)
+                    .field('richDescription', data.richDescription)
+                    .field('brand', data.brand)
+                    .field('category', convertFn)
+                    .field('price', data.price)
+                    .field('countInStock', data.countInStock)
+                    .field('rating', data.rating)
+                    .field('numReviews', data.numReviews)
                     .field('isFeatured', true);
 
                 //console.log(response.body)
@@ -173,15 +158,15 @@ describe("Productos controller", () => {
                 const { _id, dateCreated, image, images, ...expectedBody } = update.body;
     
                 expect(expectedBody).toEqual({
-                    name: 'Corsair Vengeance RAM DDR4',
-                    description: "RAM con RBG DDR4 para pc desktop",
-                    richDescription: 'Modulo DDR4 de 8GB(1x8GB) 5600Mhz',
-                    brand: 'Corsair',
-                    category: '5f15d54cf3a046427a1c26e3',
-                    price: 31.99,
-                    countInStock: 30,
-                    rating: 4.7,
-                    numReviews: 632,
+                    name: expectedBody.name,
+                    description: expectedBody.description,
+                    richDescription: expectedBody.richDescription,
+                    brand: expectedBody.brand,
+                    category: expectedBody.category,
+                    price: expectedBody.price,
+                    countInStock: expectedBody.countInStock,
+                    rating: expectedBody.rating,
+                    numReviews: expectedBody.numReviews,
                     isFeatured: true,
                     __v: 0
                 });
@@ -205,18 +190,23 @@ describe("Productos controller", () => {
 
         it('Deberia retornar 400 si una imagen no es cargada', async() => {
             try {
+                const data = await factory.create('product');                
+
+                //convertimos la funcion resultado a string
+                let convertFn = data.category.toString();
+
                 const updateImage = await request(app)
                     .put(`${url}/products/${product[0].id}`)
                     .attach('image', '')
-                    .field('name', 'Corsair Vengeance RAM DDR4')
-                    .field('description', 'RAM con RBG DDR4 para pc desktop')
-                    .field('richDescription', 'Modulo DDR4 de 8GB(1x8GB) 5600Mhz')
-                    .field('brand', 'Corsair')
-                    .field('category', '5f15d54cf3a046427a1c26e3')
-                    .field('price', 31.99)
-                    .field('countInStock', 30)
-                    .field('rating', 4.7)
-                    .field('numReviews', 632)
+                    .field('name', data.name)
+                    .field('description', data.description)
+                    .field('richDescription', data.richDescription)
+                    .field('brand', data.brand)
+                    .field('category', convertFn)
+                    .field('price', data.price)
+                    .field('countInStock', data.countInStock)
+                    .field('rating', data.rating)
+                    .field('numReviews', data.numReviews)
                     .field('isFeatured', true);
                 
                 expect(updateImage.statusCode).toBe(400);
