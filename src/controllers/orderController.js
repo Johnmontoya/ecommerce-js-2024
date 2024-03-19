@@ -1,12 +1,15 @@
 const { OrderItem } = require('../models/order-item');
 const OrderService = require('../services/orderServices');
+const { schemaOrders } = require('../models/schemas/schemaData');
 
 const orderServices = new OrderService();
 
 async function getOrders(req, res){
     try {
         const orders = await orderServices.getAllOrders();
-        res.json(orders);
+        res.status(200).json({
+            orders: orders
+        });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -16,6 +19,15 @@ async function getOrders(req, res){
 
 async function createOrder(req, res){
     try {
+        //validate order
+        const { error } = schemaOrders.validate(req.body);
+
+        if (error) {
+            return res.status(400).json(
+                {error: error.message}
+            )
+        }
+
         const orderItemsIds = Promise.all(req.body.orderItems.map(async(orderItem) => {
 
             let newOrderItem = new OrderItem({
@@ -51,8 +63,7 @@ async function createOrder(req, res){
         }
 
         const newOrder = await orderServices.registerOrder(order);
-        res.json(newOrder);
-
+        res.status(201).json(newOrder);
     } catch (error) {
         res.status(500).json({
             error: error.message
@@ -64,7 +75,9 @@ async function getOrder(req, res){
     try {
         const orderId = req.params.id;
         const order = await orderServices.getOneOrder(orderId);
-        res.json(order);
+        res.status(200).json({
+            order: order
+        });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -75,7 +88,9 @@ async function getOrder(req, res){
 async function totalSales(req, res){
     try {
         const totalSales = await orderServices.getTotalSales();
-        res.json({ totalSales: totalSales.pop().totalsales });
+        res.status(200).json(
+            { totalSales: totalSales.pop().totalsales }
+        );
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -86,7 +101,9 @@ async function totalSales(req, res){
 async function ordersCount(req, res){
     try {
         const orders = await orderServices.getOrdersCount();
-        res.json(orders);
+        res.status(200).json({
+            orders: orders
+        });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -98,7 +115,9 @@ async function userOrderList(req, res){
     try {
         const userId = req.params.userid;
         const userList = await orderServices.getUserOrder(userId);
-        res.json(userList);
+        res.status(200).json({
+            userList: userList
+        });
     } catch (error) {
         res.status(404).json({
             error: error.message
@@ -111,8 +130,10 @@ async function putOrder(req, res){
         const orderId = req.params.id;
         const orderData = req.body.state;
         
-        const order = await orderServices.updateOrder(orderId, orderData);
-        res.json(order);
+        await orderServices.updateOrder(orderId, orderData);
+        res.status(200).json({
+            message: 'Orden actualizada'
+        });
     } catch (error) {
         res.status(500).json({
             error: error.message
@@ -128,7 +149,7 @@ async function deleteOrder(req, res){
             message: 'Orden eliminada'
         });
     } catch (error) {
-        res.status(500).json({
+        res.status(404).json({
             error: error.message
         })
     }

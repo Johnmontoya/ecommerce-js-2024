@@ -53,6 +53,9 @@ class OrderService {
 
     async updateOrder(orderId, orderData){
         const order = await this.orderRepository.putOrder(orderId, orderData);
+        if(!order){
+            throw new Error('Orden no encontrada');
+        }
         return order;
     }
 

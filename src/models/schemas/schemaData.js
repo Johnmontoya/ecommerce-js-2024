@@ -110,9 +110,47 @@ const schemaProduct = joi.object({
 
 })
 
+const schemaOrders = joi.object({
+    orderItems: joi.array().items(
+        joi.object({
+            quantity: joi.number(),
+            product: joi.string()
+        })
+    ),
+    shippingAddress1: joi.string().required()
+        .messages({
+            'string.empty': `Este campo no puede estar vacio`,
+            'any.required': `El stock es requerido`
+        }),
+    shippingAddress2: joi.string(),
+    city: joi.string().required()
+        .messages({
+            'string.empty': `Este campo no puede estar vacio`,
+            'any.required': `La ciudad es requerida`
+        }),
+    zip: joi.string().required()
+        .messages({
+            'string.empty': `Este campo no puede estar vacio`,
+            'any.required': `El codigo postal es requerido`
+        }),
+    country: joi.string().required()
+        .messages({
+            'string.empty': `Este campo no puede estar vacio`,
+            'any.required': `El pais es requerido`
+        }),
+    phone: joi.string().required()
+        .messages({
+            'string.empty': `Este campo no puede estar vacio`,
+            'any.required': `Un número de celular es requerido`
+        }),
+    status: joi.string().required(),
+    user: joi.string(),
+})
+
 module.exports = {
     schemaLogin,
     schemaUser,
     schemaCategory,
-    schemaProduct
+    schemaProduct,
+    schemaOrders
 }

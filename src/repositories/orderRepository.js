@@ -77,7 +77,7 @@ class OrderRepository {
     async putOrder(orderId, orderData){
         try {
             const state = await Order.findById(orderId);
-            console.log('repo', orderData);
+            
             switch(orderData){
                 case 1:
                     state.status = 'pending';
