@@ -34,6 +34,11 @@ class UserService {
         }
         return user;
     }
+    async getIsEmailExists(email) {
+        const user = await this.userRepository.isEmailExists(email);
+        return user;
+    }
+
     async emailUser(email){
         const user = await this.userRepository.loginEmail(email);
         if(!user){

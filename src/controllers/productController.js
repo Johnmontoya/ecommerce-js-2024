@@ -2,6 +2,7 @@ const multer = require('multer');
 const fs = require('fs');
 const ProductService = require('../services/productServices');
 const { default: mongoose } = require('mongoose');
+const { schemaProduct } = require('../models/schemas/schemaData');
 
 const productServices = new ProductService();
 
@@ -48,6 +49,15 @@ async function createProduct(req, res){
             
             const fileName = req.file.filename;
             const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+
+            //validate product
+            const { error } = schemaProduct.validate(req.body);
+
+            if (error) {
+                return res.status(400).json(
+                    {error: error.message}
+                )
+            }
 
             const productData = {
                 ...req.body,
@@ -145,6 +155,15 @@ async function updatedProduct(req, res){
             const fileName = req.file.filename;
             const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
+            //validate product
+            const { error } = schemaProduct.validate(req.body);
+
+            if (error) {
+                return res.status(400).json(
+                    {error: error.message}
+                )
+            }
+            
             const productData = {
                 ...req.body,
                 image: `${basePath}${fileName}`

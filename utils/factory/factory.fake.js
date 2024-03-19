@@ -13,7 +13,7 @@ factory.define('category', Category, {
 
 factory.define('user', User, {
     name: faker.person.firstName(),
-    email: faker.internet.email(),
+    email: faker.internet.email({ allowSpecialCharacters: true }),
     phone: faker.phone.number(),
     isAdmin: true,
     street: faker.location.streetAddress(),

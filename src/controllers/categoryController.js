@@ -1,9 +1,19 @@
 const CategoryService = require('../services/categoryServices');
+const { schemaCategory } = require('../models/schemas/schemaData');
 
 const categoryService = new CategoryService();
 
 async function createCategory(req, res) {
     try {
+        //validate category
+        const { error } = schemaCategory.validate(req.body);
+
+        if (error) {
+            return res.status(400).json(
+                {error: error.message}
+            )
+        }
+
         const categoryData = req.body;
         const newCategory = await categoryService.registerCategory(categoryData);
         res.status(201).json(newCategory);
@@ -40,16 +50,20 @@ async function getCategory(req, res) {
 async function updateCategory(req, res){
     try {
         const categoryId = req.params.id;
-        const { name, icon, color } = req.body;
 
-        if (!name || !icon || !color) {
-            return res.status(404).json({ message: 'Name, icon, and color are required fields' });
+        //validate category
+        const { error } = schemaCategory.validate(req.body);
+
+        if (error) {
+            return res.status(400).json(
+                {error: error.message}
+            )
         }
 
         let categoryData = {
-            name: name,
-            icon: icon,
-            color: color
+            name: req.body.name,
+            icon: req.body.icon,
+            color: req.body.color
         }
 
         const category = await categoryService.updateCategory(categoryId, categoryData)

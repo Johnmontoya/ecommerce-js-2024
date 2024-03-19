@@ -21,12 +21,16 @@ describe("Users controller", () => {
                 const data = await factory.create('user', {
                     passwordHash: bcrypt.hashSync('pacoelflaco', 10)
                 });
+
+                //Una extension ya que faker no esta generando aleatorios
+                const newEmail = 'x' + data.email;
+
                 const user = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', "application/json")
                     .send({
                         name: data.name,
-                        email: data.email,
+                        email: newEmail.toString(), 
                         password: data.passwordHash,
                         phone: data.phone,
                         isAdmin: true,

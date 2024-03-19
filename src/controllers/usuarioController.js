@@ -1,11 +1,22 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const UsuarioService = require('../services/userServices');
+const { schemaUser, schemaLogin } = require('../models/schemas/schemaData');
 
 const usuarioService = new UsuarioService();
 
 async function createUser(req, res){
     try {
+
+        //validate user
+        const { error } = schemaUser.validate(req.body);
+
+        if (error) {
+            return res.status(400).json(
+                {error: error.message}
+            )
+        }
+
         const { name,
             email,
             password,
@@ -16,28 +27,11 @@ async function createUser(req, res){
             zip,
             city,
             country } = req.body;
-
-        if(!name){
+            
+        const isEmailExists = await usuarioService.getIsEmailExists(req.body.email);
+        if(isEmailExists){
             return res.status(400).json({
-                message: 'El nombre de usuario es requerido'
-            })
-        }
-
-        if(!email){
-            return res.status(400).json({
-                message: 'El email de usuario es requerido'
-            })
-        }
-
-        if(!password){
-            return res.status(400).json({
-                message: 'Una contraseña es requerida'
-            })
-        }
-
-        if(!phone){
-            return res.status(400).json({
-                message: 'El teléfono de usuario es requerido'
+                error: 'Email ya registrado'
             })
         }
 
@@ -55,7 +49,9 @@ async function createUser(req, res){
         };
 
         const newUser = await usuarioService.registerUser(userData);
-        res.status(201).json(newUser)
+        res.status(201).json({
+            newUser
+        })
     } catch (error) {
         res.status(500).json({
             error: error.message
@@ -118,6 +114,16 @@ async function getEmail(req, res){
 
 async function login(req, res) {
     try {
+        //validate user
+        const { error } = schemaLogin.validate(req.body);
+
+
+        if (error) {
+            return res.status(400).json(
+                {error: error.message}
+            )
+        }
+
         const user = await usuarioService.emailUser(req.body.email);
         const secret = process.env.SECRET;
         if(user && bcrypt.compareSync(req.body.password, user.passwordHash)){
@@ -145,34 +151,21 @@ async function login(req, res) {
 async function updateUser(req, res) {
     try {
         const userId = req.params.id;
+
+        //validate user
+        const { error } = schemaUser.validate(req.body);
+
+
+        if (error) {
+            return res.status(400).json(
+                {error: error.message}
+            )
+        }
+
         const {
             name, email, password, phone, isAdmin,
             street, apartment, zip, city, country
         } = req.body;
-
-        if(!name){
-            return res.status(400).json({
-                message: 'El nombre de usuario es requerido'
-            })
-        }
-
-        if(!email){
-            return res.status(400).json({
-                message: 'El email de usuario es requerido'
-            })
-        }
-
-        if(!password){
-            return res.status(400).json({
-                message: 'Una contraseña es requerida'
-            })
-        }
-
-        if(!phone){
-            return res.status(400).json({
-                message: 'El teléfono de usuario es requerido'
-            })
-        }
 
         let userData = {
             name: name,
