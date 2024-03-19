@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const { faker } = require('@faker-js/faker');
 const { factory } = require('factory-girl');
 const { Category } = require('../../src/models/category');
@@ -8,31 +7,31 @@ const { Order } = require('../../src/models/order');
 const { OrderItem } = require('../../src/models/order-item');
 
 factory.define('category', Category, {
-    name: faker.commerce.productAdjective(),
-    icon: faker.internet.emoji(),
-    color: faker.color.rgb({ format: 'hex', casing: 'lower'})
+    name: factory.seq((n) => `${n}${faker.commerce.productAdjective()}`),
+    icon: factory.seq((n) => `${n}${faker.internet.emoji()}`),
+    color: factory.seq((n) => `${n}${faker.color.rgb({ format: 'hex', casing: 'lower'})}`)
 })
 
 factory.define('user', User, {
-    name: faker.person.firstName(),
-    email: faker.internet.email({ allowSpecialCharacters: true }),
-    phone: faker.phone.number(),
+    name: factory.seq((n) => `${n}${faker.person.firstName()}`),
+    email: factory.seq((n) => `${n}${faker.internet.email({ allowSpecialCharacters: true })}`),
+    phone: factory.seq((n) => `${n}${faker.phone.number()}`),
     isAdmin: true,
-    street: faker.location.streetAddress(),
-    apartment: faker.location.street(),
-    zip: faker.location.zipCode(),
-    city: faker.location.city(),
-    country: faker.location.country()
+    street: factory.seq((n) => `${n}${faker.location.streetAddress()}`),
+    apartment: factory.seq((n) => `${n}${faker.location.street()}`),
+    zip: factory.seq((n) => `${n}${faker.location.zipCode()}`),
+    city: factory.seq((n) => `${n}${faker.location.city()}`),
+    country: factory.seq((n) => `${n}${faker.location.country()}`)
 })
 
 factory.define('product', Product, {
-    name: faker.commerce.productName(),
-    description: faker.commerce.productDescription(),
-    richDescription: faker.commerce.productDescription(),
-    image: '',
-    category: faker.database.mongodbObjectId(),
-    brand: faker.commerce.productMaterial(),
-    price: faker.commerce.price(),
+    name: factory.seq((n) => `${n}${faker.commerce.productName()}`),
+    description: factory.seq((n) => `${n}${faker.commerce.productDescription()}`),
+    richDescription: factory.seq((n) => `${n}${faker.commerce.productDescription()}`),
+    image: faker.image.url(),
+    category: faker.database.mongodbObjectId().toString(),
+    brand: factory.seq((n) => `${n}${faker.commerce.productMaterial()}`),
+    price: factory.seq((n) => `${n}${faker.commerce.price()}`),
     countInStock: faker.number.int(100),
     rating: faker.number.int({ min: 1, max: 5}),
     numReviews: faker.number.int(),
@@ -46,11 +45,11 @@ factory.define('orderItem', OrderItem, {
 
 factory.define('order', Order, {
     orderItems: factory.assocMany('orderItem', 2),
-    shippingAddress1: faker.location.streetAddress(),
-    shippingAddress2: faker.location.streetAddress(),
-    city: faker.location.city(),
+    shippingAddress1: factory.seq((n) => `${n}${faker.location.streetAddress()}`),
+    shippingAddress2: factory.seq((n) => `${n}${faker.location.streetAddress()}`),
+    city: factory.seq((n) => `${n}${faker.location.city()}`),
     zip: faker.location.zipCode(),
-    country: faker.location.country(),
+    country: factory.seq((n) => `${n}${faker.location.country()}`),
     phone: faker.phone.number(),
     status: 'pending',
     totalPrice: faker.number.int({ min: 1, max: 1000 }),

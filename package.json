@@ -2,10 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000 --detectOpenHandles --forceExit"
+    "test": "cross-env NODE_ENV=test jest --testTimeout=5000 --detectOpenHandles --forceExit",
+    "seed": "node ./utils/seeder/seed.js"
   },
   "keywords": [],
   "author": "John Montoya",
