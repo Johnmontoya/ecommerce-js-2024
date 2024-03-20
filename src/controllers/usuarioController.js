@@ -117,7 +117,6 @@ async function login(req, res) {
         //validate user
         const { error } = schemaLogin.validate(req.body);
 
-
         if (error) {
             return res.status(400).json(
                 {error: error.message}
@@ -142,7 +141,7 @@ async function login(req, res) {
         }
         
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             error: error.message
         })
     }
