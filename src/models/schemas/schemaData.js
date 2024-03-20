@@ -53,6 +53,17 @@ const schemaLogin = joi.object({
         })
 })
 
+const schemaForgot = joi.object({
+    email: joi.string().min(3).max(35).required().email()
+        .messages({
+            'string.min': `El email no debe ser inferior a 3 carácteres`,
+            'string.max': `El email no debe ser superior a 35 carácteres`,
+            'string.empty': `Este campo no puede estar vacio`,
+            'any.required': `El email es requerido`,
+            'string.email': `Dirección de correo invalida`
+        })
+})
+
 const schemaCategory = joi.object({
     name: joi.string().required()
         .messages({
@@ -150,6 +161,7 @@ const schemaOrders = joi.object({
 module.exports = {
     schemaLogin,
     schemaUser,
+    schemaForgot,
     schemaCategory,
     schemaProduct,
     schemaOrders

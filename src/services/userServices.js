@@ -42,7 +42,7 @@ class UserService {
     async emailUser(email){
         const user = await this.userRepository.loginEmail(email);
         if(!user){
-            throw new Error('Email incorrecto')
+            throw new Error('No existe ese email')
         }
         return user;
     }
