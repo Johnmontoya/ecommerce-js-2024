@@ -47,6 +47,11 @@ class UserService {
         return user;
     }
 
+    async updatePass(pass, userId, token) {
+        const data = await this.userRepository.resetPass(pass, userId, token);
+        return data;
+    }
+
     async updateUser(userId, userData){
         const user = await this.userRepository.updateUser(userId, userData);
         if(!user){

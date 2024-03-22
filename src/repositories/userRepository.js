@@ -55,6 +55,22 @@ class UserRepository {
         }
     }
 
+    async resetPass(pass, userId, token) {
+        try {
+            const data = await User.findOneAndUpdate({
+                _id: userId, tokenResetPassword: token
+            }, {
+                passwordHash: pass
+            }, {
+                new: true
+            })
+
+            return data;
+        } catch (error) {
+            throw new Error('La contraseña no pudo ser cambiada: ' + error.message);
+        }
+    }
+
     async updateUser(userId, userData){
         try {
             const {

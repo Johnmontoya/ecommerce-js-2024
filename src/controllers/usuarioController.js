@@ -224,6 +224,22 @@ async function forgotPassword(req, res) {
     }
 }
 
+async function resetPassword(req, res) {
+    try {
+        const pass = bcrypt.hashSync(req.body.password, 10);
+        const userId = req.body.userId;
+        const token = req.body.token;
+        await usuarioService.updatePass(pass, userId, token);
+        res.status(200).json({
+            message: 'Contraseña cambiada'
+        })
+    } catch (error) {
+        res.status(404).json({
+            error: error.message
+        })   
+    }
+}
+
 async function updateUser(req, res) {
     try {
         const userId = req.params.id;
@@ -289,6 +305,7 @@ module.exports = {
     getEmail,
     login,
     forgotPassword,
+    resetPassword,
     updateUser,
     deleteUser
 }
