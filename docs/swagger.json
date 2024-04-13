@@ -1582,7 +1582,7 @@
                     "totalPrice": {
                         "type": "integer",
                         "description": "Devuelve en valor numerico el total de productos ordenados",
-                        "example": "Se genera de manera automática"
+                        "example": "Se genera de manera automática, borrar en el evento POST"
                     },
                     "user": {
                         "type": "string",
@@ -1594,7 +1594,7 @@
                     "dateOrdered": {
                         "type": "date",
                         "description": "Fecha de registro de la orden / automático",
-                        "example": " se genera de manera automática"
+                        "example": " se genera de manera automática, borrar en el evento POST"
                     }
                 }
             },

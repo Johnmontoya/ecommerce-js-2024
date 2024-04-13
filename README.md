@@ -1,6 +1,6 @@
 # Ecommerce
 
-Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest para pruebas y documentacion con swagger.
+Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest para pruebas, documentacion con swagger y pagos con paypal.
 
 
 ## TECNOLOGIAS
@@ -15,9 +15,22 @@ Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest
 - [Nodemailer]
 - [Jest]
 - [Swagger]
+- [Paypal]
 
+## INSTALACION
 
+Versión utilizada de Node (20.11)
+```
+cd backend
+npm install
+```
 
+Usar la targeta generada por paypal:
+Fecha de expiración y cv pueden ser cualquiera.
+````
+[label Credit card]
+4005519200000004
+```
 
 
 
@@ -32,3 +45,4 @@ Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest
 [Nodemailer]: <https://www.nodemailer.com/>
 [Jest]: <https://jestjs.io/>
 [Swagger]: <https://swagger.io/>
+[Paypal]: <https://www.npmjs.com/package/paypal-rest-sdk>

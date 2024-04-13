@@ -5,11 +5,13 @@ const swaggerSpec = require('../docs/swagger.json');
 const morgan = require('morgan');
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
+const categoriaRutas = require('./routes/categoryRoutes');
+const paymentRouter = require('./routes/paymentRoutes');
 const orderRouter = require('./routes/orderRoutes');
 const errorHandler = require('./middlewares/error-handler');
 const cors = require('cors');
 
-const categoriaRutas = require('./routes/categoryRoutes');
+
 const Authenticate = require('./middlewares/deserializer-auth');
 
 require('dotenv/config')
@@ -32,5 +34,6 @@ app.use(`${api}/orders`, orderRouter);
 app.use(`${api}/products`, productRouter);
 app.use(`${api}/users`, userRouter);
 app.use(`${api}/categorias`, categoriaRutas);
+app.use(`${api}/payment`, paymentRouter);
 
 module.exports = app;
