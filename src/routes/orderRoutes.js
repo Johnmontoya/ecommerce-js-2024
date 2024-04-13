@@ -8,14 +8,16 @@ const { getOrders,
     createOrder,
     deleteOrder,
     putOrder} = require('../controllers/orderController');
+const LogUser = require('../middlewares/auth-require');
+const isAdmin = require('../middlewares/isAdmin');
 
-router.get('/', getOrders);
-router.get('/:id', getOrder);
-router.post('/', createOrder);
-router.get('/get/totalsales', totalSales);
-router.get('/get/count', ordersCount);
-router.get('/get/userorders/:userid', userOrderList);
-router.put('/:id', putOrder);
-router.delete('/:id', deleteOrder);
+router.get('/', LogUser, getOrders);
+router.get('/:id', LogUser, getOrder);
+router.post('/', LogUser, createOrder);
+router.get('/get/totalsales', LogUser, isAdmin, totalSales);
+router.get('/get/count', LogUser, ordersCount);
+router.get('/get/userorders/:userid', LogUser, userOrderList);
+router.put('/:id', LogUser, putOrder);
+router.delete('/:id', LogUser, deleteOrder);
 
 module.exports = router;

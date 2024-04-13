@@ -1,15 +1,30 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const path = require('path');
-const { Product } = require('../../src/models/product');
+const bcrypt = require('bcryptjs');
 const factory = require('../../utils/factory/factory.fake');
 
 require('dotenv').config();
 
 const url = process.env.API_URL
 let product;
+let user;
+let login;
 beforeEach(async() => {
-  product = await factory.createMany('product', 2)
+    product = await factory.createMany('product', 2)
+
+    user = await factory.create('user', {
+        passwordHash: bcrypt.hashSync('pacoelflaco', 10),
+        role: 'Admin'
+    });
+
+    login = await request(app)
+        .post(`${url}/users/login`)
+        .set('content-type', "application/json")
+        .send({
+            email: user.email,
+            password: 'pacoelflaco'
+    })
 })
 
 describe("Productos controller", () => {
@@ -22,8 +37,9 @@ describe("Productos controller", () => {
                 //convertimos la funcion resultado a string
                 let convertFn = data.category.toString();
 
-                const response = await request(app)
+                const response = await request(app)                    
                     .post(`${url}/products`)
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .attach('image', imagePath)
                     .field('name', data.name)
                     .field('description', data.description)
@@ -137,8 +153,9 @@ describe("Productos controller", () => {
                 //convertimos la funcion resultado a string
                 let convertFn = data.category.toString();
 
-                const update = await request(app)
+                const update = await request(app)                    
                     .put(`${url}/products/${product[0].id}`)
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .attach('image', imagePath)
                     .field('name', data.name)
                     .field('description', data.description)
@@ -180,6 +197,7 @@ describe("Productos controller", () => {
             try {
                 const update = await request(app)
                     .put(`${url}/products/639c80ef98284bfdf111ad09}`)
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(update.statusCode).toBe(400);
                 expect(update.body).toHaveProperty('error');
             } catch (error) {
@@ -197,6 +215,7 @@ describe("Productos controller", () => {
 
                 const updateImage = await request(app)
                     .put(`${url}/products/${product[0].id}`)
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .attach('image', '')
                     .field('name', data.name)
                     .field('description', data.description)
@@ -222,7 +241,8 @@ describe("Productos controller", () => {
         it('Deberia eliminar el producto y retornar code 200', async() => {
             const response = await request(app)
                 .delete(`${url}/products/${product[1].id}`)
-                .set('content-type', 'application/json');
+                .set('content-type', 'application/json')
+                .set('Authorization', `Bearer ${login.body.token}`);
             
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('message');
@@ -232,6 +252,7 @@ describe("Productos controller", () => {
             try {
                 const response = await request(app)
                     .delete(`${url}/products/639c80ef98284bfdf111ad09}`)
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(response.statusCode).toBe(400);
                 expect(response.body).toHaveProperty('error');
             } catch (error) {
@@ -247,7 +268,8 @@ describe("Productos controller", () => {
                 const count = true;
                 const response = await request(app)
                     .get(`${url}/products/get/featured/${count}`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toHaveProperty('product');
@@ -262,7 +284,8 @@ describe("Productos controller", () => {
                 const count = false;
                 const response = await request(app)
                     .get(`${url}/products/get/featured/${count}`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toHaveProperty('product');
@@ -278,7 +301,8 @@ describe("Productos controller", () => {
             try {
                 const response = await request(app)
                     .get(`${url}/products/get/count`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toHaveProperty('product');
@@ -299,6 +323,7 @@ describe("Productos controller", () => {
 
                 const response = await request(app)
                     .put(`${url}/products/gallery-images/${product[0].id}`)
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .attach('images', imagePath[0])
                     .attach('images', imagePath[1]);
                 
@@ -314,6 +339,7 @@ describe("Productos controller", () => {
             try {
                 const response = await request(app)
                     .put(`${url}/products/gallery-images/639c80ef98284bfdf111ad09}`)
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(response.statusCode).toBe(400);
                 expect(response.body).toHaveProperty('error');
             } catch (error) {

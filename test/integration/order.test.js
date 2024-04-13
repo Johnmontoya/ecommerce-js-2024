@@ -1,14 +1,30 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const factory = require('../../utils/factory/factory.fake');
+const bcrypt = require('bcryptjs');
 
 require('dotenv').config();
 
 const url = process.env.API_URL
 let orders;
+let user;
+let login;
 beforeEach(async() => {
     orders = await factory.createMany('order', 2);
     //console.log(orders)
+
+    user = await factory.create('user', {
+        passwordHash: bcrypt.hashSync('pacoelflaco', 10),
+        role: 'Admin'
+    });
+
+    login = await request(app)
+        .post(`${url}/users/login`)
+        .set('content-type', "application/json")
+        .send({
+            email: user.email,
+            password: 'pacoelflaco'
+    })
 })
 
 describe("Orders controller", () => {
@@ -21,6 +37,7 @@ describe("Orders controller", () => {
                 const response = await request(app)
                     .post(`${url}/orders`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         orderItems: [
                             {
@@ -51,7 +68,8 @@ describe("Orders controller", () => {
             try {
                 const order = await request(app)
                     .get(`${url}/orders`)
-                    .set("content-type", "application/json");
+                    .set("content-type", "application/json")
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(order.statusCode).toBe(200);
                 expect(order.body).toHaveProperty("orders");
                 expect(order.body.orders.length).toBeGreaterThan(0);
@@ -68,6 +86,7 @@ describe("Orders controller", () => {
                 const order = await request(app)
                     .get(`${url}/orders/${orders[1].id}`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 expect(order.statusCode).toBe(200);
                 expect(order.body).toHaveProperty('order');
@@ -82,6 +101,7 @@ describe("Orders controller", () => {
                 const order = await request(app)
                     .get(`${url}/orders/639c80ef98284bfdf111ad09`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 //console.log(categoria.body);
                 expect(order.statusCode).toBe(404);
@@ -98,7 +118,8 @@ describe("Orders controller", () => {
             try {
                 const total = await request(app)
                     .get(`${url}/orders/get/totalsales`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 expect(total.statusCode).toBe(200);
                 expect(total.body).toHaveProperty('totalSales');
@@ -115,6 +136,7 @@ describe("Orders controller", () => {
                 const count = await request(app)
                     .get(`${url}/orders/get/count`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
 
                 expect(count.statusCode).toBe(200);
                 expect(count.body).toHaveProperty('orders')
@@ -131,6 +153,7 @@ describe("Orders controller", () => {
                 const order = await request(app)
                     .get(`${url}/orders/get/userorders/${orders[0].id}`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
 
                 expect(order.statusCode).toBe(404);
                 expect(order.body).toHaveProperty('error');
@@ -145,6 +168,7 @@ describe("Orders controller", () => {
                 const order = await request(app)
                     .get(`${url}/orders/get/userorders/639c80ef98284bfdf111ad09`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 //console.log(categoria.body);
                 expect(order.statusCode).toBe(404);
@@ -162,6 +186,7 @@ describe("Orders controller", () => {
                 const estado = await request(app)
                     .put(`${url}/orders/${orders[1].id}`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         state: 2
                     });
@@ -180,7 +205,8 @@ describe("Orders controller", () => {
             try {
                 const remove = await request(app)
                     .delete(`${url}/orders/${orders[1].id}`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 expect(remove.statusCode).toBe(200);
                 expect(remove.body).toHaveProperty('message');
@@ -195,6 +221,7 @@ describe("Orders controller", () => {
                 const order = await request(app)
                     .delete(`${url}/orders/639c80ef98284bfdf111ad09`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 //console.log(categoria.body);
                 expect(order.statusCode).toBe(404);

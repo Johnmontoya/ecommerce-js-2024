@@ -23,7 +23,7 @@ async function createUser(req, res){
             email,
             password,
             phone,
-            isAdmin,
+            role,
             street,
             apartment,
             zip,
@@ -42,7 +42,7 @@ async function createUser(req, res){
             email: email,
             passwordHash: bcrypt.hashSync(password, 10),
             phone: phone,
-            isAdmin: isAdmin,
+            role: role,
             street: street,
             apartment: apartment,
             zip: zip,
@@ -50,11 +50,12 @@ async function createUser(req, res){
             country: country
         };
 
-        const newUser = await usuarioService.registerUser(userData);
+        await usuarioService.registerUser(userData);
         res.status(201).json({
-            newUser
+            message: 'Usuario registrado'
         })
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             error: error.message
         })
@@ -130,18 +131,60 @@ async function login(req, res) {
         if(user && bcrypt.compareSync(req.body.password, user.passwordHash)){
             const token = jwt.sign({
                 userId: user.id,
-                isAdmin: user.isAdmin
-            }, secret, { expiresIn: '1d'});
+                role: user.role
+            }, secret, { expiresIn: '1h'});
             res.status(200).header('authToken', token).json({
-                user: user.email,
+                user: user.name,
+                userId: user.id,
                 token: token
             });
         } else {
             res.status(400).json({
-                message: 'Contraseña incorrecta'
+                error: 'Contraseña incorrecta'
             })
         }
         
+    } catch (error) {
+        res.status(400).json({
+            error: error.message
+        })
+    }
+}
+
+async function register(req, res) {
+    try {
+        //validate user
+        const { error } = schemaLogin.validate(req.body);
+
+        if (error) {
+            return res.status(400).json(
+                {error: error.message}
+            )
+        }
+
+        const { name,
+            email,
+            password,
+            phone} = req.body;
+
+        const isEmailExists = await usuarioService.getIsEmailExists(req.body.email);
+        if(isEmailExists){
+            return res.status(400).json({
+                error: 'Email ya registrado'
+            })
+        }
+
+        let userData = {
+            name: name,
+            email: email,
+            passwordHash: bcrypt.hashSync(password, 10),
+            phone: '0000000000'
+        }
+
+        const newUser = await usuarioService.registerUser(userData);
+        res.status(201).json({
+            message: 'Usuario registrado'
+        })
     } catch (error) {
         res.status(400).json({
             error: error.message
@@ -255,16 +298,15 @@ async function updateUser(req, res) {
         }
 
         const {
-            name, email, password, phone, isAdmin,
+            name, email, phone, roles,
             street, apartment, zip, city, country
         } = req.body;
 
         let userData = {
             name: name,
             email: email,
-            password: bcrypt.hashSync(password, 10),
             phone: phone,
-            isAdmin: isAdmin,
+            roles: roles,
             street: street,
             apartment: apartment,
             zip: zip,
@@ -274,7 +316,7 @@ async function updateUser(req, res) {
 
         const user = await usuarioService.updateUser(userId, userData);
         res.status(200).json({
-            user: user
+            message: 'Usuario actualizado'
         });
     } catch (error) {
         res.status(404).json({
@@ -304,6 +346,7 @@ module.exports = {
     getUserCount,
     getEmail,
     login,
+    register,
     forgotPassword,
     resetPassword,
     updateUser,

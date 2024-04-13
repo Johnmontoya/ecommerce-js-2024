@@ -1,13 +1,29 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const factory = require('../../utils/factory/factory.fake');
+const bcrypt = require('bcryptjs');
 
 require('dotenv').config();
 
 const url = process.env.API_URL
 let category;
+let user;
+let login;
 beforeEach(async() => {
     category = await factory.createMany('category', 2);
+
+    user = await factory.create('user', {
+        passwordHash: bcrypt.hashSync('pacoelflaco', 10),
+        role: 'Admin'
+    });
+
+    login = await request(app)
+        .post(`${url}/users/login`)
+        .set('content-type', "application/json")
+        .send({
+            email: user.email,
+            password: 'pacoelflaco'
+    })
 })
 
 describe("Categorias controller", () => {
@@ -18,6 +34,7 @@ describe("Categorias controller", () => {
                 const response = await request(app)
                     .post(`${url}/categorias`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: data.name,
                         icon: data.icon,
@@ -106,6 +123,7 @@ describe("Categorias controller", () => {
                 const data = await factory.create('category');
                 const update = await request(app)
                     .put(`${url}/categorias/${category[0].id}`)
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: data.name,
                         icon: data.icon,
@@ -133,6 +151,7 @@ describe("Categorias controller", () => {
             try{
                 const update = await request(app)
                     .put(`${url}/categorias/639c80ef98284bfdf111ad09}`)
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: "Home",
                         icon: "house",
@@ -155,7 +174,8 @@ describe("Categorias controller", () => {
             try{
                 const categoria = await request(app)
                     .delete(`${url}/categorias/${category[1].id}`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                         
                 expect(categoria.statusCode).toBe(200);
                 expect(categoria.body).toHaveProperty("message");
@@ -170,6 +190,7 @@ describe("Categorias controller", () => {
                 const update = await request(app)
                     .delete(`${url}/categorias/639c80ef98284bfdf111ad09}`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 //console.log(categoria.body);
                 expect(update.statusCode).toBe(404);

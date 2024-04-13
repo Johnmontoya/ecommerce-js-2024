@@ -7,6 +7,24 @@ require('dotenv').config();
 
 const url = process.env.API_URL
 
+let user;
+let login;
+beforeEach(async() => {
+
+    user = await factory.create('user', {
+        passwordHash: bcrypt.hashSync('pacoelflaco', 10),
+        role: 'Admin'
+    });
+
+    login = await request(app)
+        .post(`${url}/users/login`)
+        .set('content-type', "application/json")
+        .send({
+            email: user.email,
+            password: 'pacoelflaco'
+    })
+})
+
 describe("Usuario Unit testing", () => {
     describe(`POST ${url}/users`, () => {
         it('Deberia validar si el nombre de usuario es inferior a 3 carácteres', async() => {
@@ -14,10 +32,11 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: 'Cj'
                     });
-                //console.log(data.body)
+                console.log(data.body)
                 expect(data.statusCode).toBe(400);
                 expect(data.body).toHaveProperty('error');
             } catch (error) {
@@ -31,6 +50,7 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: 'Luis Alberto Gomez Bolañoz'
                     });
@@ -48,6 +68,7 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: ''
                     });
@@ -65,6 +86,7 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: 'John Doe',
                         email: ''
@@ -83,6 +105,7 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: 'John Doe',
                         email: 'johndoegmail.com'
@@ -101,6 +124,7 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: 'John Doe',
                         email: 'johndoe@gmail.com',
@@ -120,12 +144,13 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: 'John Doe',
                         email: 'johndoe@gmail.com',
                         password: 'pacoelflaco',
                         phone: '+5731431234350',
-                        isAdmin: true,
+                        role: 'User',
                         zip: '190243',
                         street: 'Kra 13',
                         apartment: 'Hotel Casino',
@@ -134,8 +159,7 @@ describe("Usuario Unit testing", () => {
                     });
                 //console.log(data.body)
 
-                const compareHahs = bcrypt.compareSync("pacoelflaco", data.body.newUser.passwordHash)
-                expect(compareHahs).toBe(true);
+                expect(data.statusCode).toBe(201);
             } catch (error) {
                 console.error('Error en la prueba:', error);
                 throw error;
@@ -147,6 +171,7 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: 'John Doe',
                         email: 'johndoe@gmail.com',
@@ -169,6 +194,7 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users/login`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         email: 'pacoelflaco@gmail.com',
                         password: 'pacoelflaco'
@@ -191,13 +217,14 @@ describe("Usuario Unit testing", () => {
                 const data = await request(app)
                     .post(`${url}/users/login`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         email: user.email,
                         password: 'pacoelflacox'
                     });
                 //console.log(data.body)
                 expect(data.statusCode).toBe(400);
-                expect(data.body).toHaveProperty('message');
+                expect(data.body).toHaveProperty('error');
             } catch (error) {
                 console.error('Error en la prueba:', error);
                 throw error;
@@ -216,12 +243,13 @@ describe("Usuario Unit testing", () => {
                 const user = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', "application/json")
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: data.name,
                         email: newEmail.toString(), 
                         password: data.passwordHash,
                         phone: data.phone,
-                        isAdmin: true,
+                        role: 'User',
                         street: data.street,
                         apartment: data.apartment,
                         zip: data.zip,

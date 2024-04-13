@@ -8,14 +8,16 @@ const { createProduct,
     getCountProduct,
     getFeaturedProduct,
     updatedGalleryImages} = require('../controllers/productController');
+const LogUser = require('../middlewares/auth-require');
+const isAdmin = require('../middlewares/isAdmin');
 
-router.post('/', createProduct);
+router.post('/', LogUser, isAdmin, createProduct);
 router.get('/', getProducts);
 router.get('/:id', getProduct);
-router.put('/:id', updatedProduct);
-router.delete('/:id', deleteProduct);
-router.get('/get/count', getCountProduct);
-router.get('/get/featured/:count', getFeaturedProduct);
-router.put('/gallery-images/:id', updatedGalleryImages);
+router.put('/:id', LogUser, isAdmin, updatedProduct);
+router.delete('/:id', LogUser, isAdmin, deleteProduct);
+router.get('/get/count', LogUser, isAdmin, getCountProduct);
+router.get('/get/featured/:count', LogUser, isAdmin, getFeaturedProduct);
+router.put('/gallery-images/:id', LogUser, isAdmin, updatedGalleryImages);
 
 module.exports = router;

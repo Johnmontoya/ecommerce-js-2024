@@ -6,11 +6,11 @@ const morgan = require('morgan');
 const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
 const orderRouter = require('./routes/orderRoutes');
-const authJwt = require('../config/helpers/jwt');
-const errorHandler = require('../config/helpers/error-handler');
+const errorHandler = require('./middlewares/error-handler');
 const cors = require('cors');
 
 const categoriaRutas = require('./routes/categoryRoutes');
+const Authenticate = require('./middlewares/deserializer-auth');
 
 require('dotenv/config')
 
@@ -22,8 +22,8 @@ app.options('*', cors());
 //Middleware
 app.use(express.json());
 app.use(morgan('tiny'));
-//app.use(authJwt());
 app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
+app.use(Authenticate);
 app.use(errorHandler);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 

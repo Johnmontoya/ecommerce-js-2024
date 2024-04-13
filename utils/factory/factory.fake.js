@@ -16,7 +16,7 @@ factory.define('user', User, {
     name: factory.seq((n) => `${n}${faker.person.firstName()}`),
     email: factory.seq((n) => `${n}${faker.internet.email({ allowSpecialCharacters: true })}`),
     phone: factory.seq((n) => `${n}${faker.phone.number()}`),
-    isAdmin: true,
+    role: 'User',
     street: factory.seq((n) => `${n}${faker.location.streetAddress()}`),
     apartment: factory.seq((n) => `${n}${faker.location.street()}`),
     zip: factory.seq((n) => `${n}${faker.location.zipCode()}`),

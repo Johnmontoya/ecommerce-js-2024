@@ -55,6 +55,11 @@
                 "summary": "Crea una nueva categoria",
                 "description": "Crea una categoria y la guarda en la base de datos",
                 "operationId": "addCategory",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -136,6 +141,11 @@
             "put": {
                 "summary": "Actualiza una categoria por ID",
                 "description": "Actualiza una categoria almacenada en la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -189,6 +199,11 @@
             "delete": {
                 "summary": "Borrar una categoria por ID",
                 "description": "Borra una categoria de la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -281,6 +296,11 @@
                 "summary": "Crea un nuevo producto",
                 "description": "Crea un nuevo producto y la guarda en la base de datos",
                 "operationId": "addProduct",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -321,7 +341,12 @@
         "/api/v1/products/get/count": {
             "get": {
                 "summary": "Obtiene el total de todos los productos",
-                "description": "Cuenta el total de productos registrados",                
+                "description": "Cuenta el total de productos registrados",  
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],              
                 "responses": {
                     "200": {
                         "description": "Devuelve en valor numerico el total de productos",
@@ -352,7 +377,12 @@
         "/api/v1/products/get/featured/{count}": {
             "get": {
                 "summary": "Obtiene los productos destacados",
-                "description": "Retorna los productos destacados teniendo en cuenta el valor del parametros",                
+                "description": "Retorna los productos destacados teniendo en cuenta el valor del parametros",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],                
                 "parameters": [
                     {
                         "name": "count",
@@ -436,6 +466,11 @@
             "put": {
                 "summary": "Actualiza un producto por ID",
                 "description": "Actualiza un producto almacenado en la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -486,6 +521,11 @@
             "delete": {
                 "summary": "Borrar un producto por ID",
                 "description": "Borra un producto de la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -521,6 +561,11 @@
             "put": {
                 "summary": "Actualiza el producto con imagenes",
                 "description": "Permite subir hasta 10 imagenes y actualizar el producto",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -582,6 +627,11 @@
             "get": {
                 "summary": "Obtiene todas las ordenes registradas",
                 "description": "Retorna todas las ordenes almacenadas en la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Lista todas las ordenes",
@@ -615,6 +665,11 @@
                 "summary": "Crear nueva orden",
                 "description": "Crea una nueva orden y la guarda en la base de datos",
                 "operationId": "addOrder",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -656,6 +711,11 @@
             "get": {
                 "summary": "Obtiene una orden por ID",
                 "description": "Retorna una orden por ID",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -696,6 +756,11 @@
             "delete": {
                 "summary": "Borrar una orden por ID",
                 "description": "Borra una orden de la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -729,6 +794,11 @@
             "put": {
                 "summary": "Actualizar estado",
                 "description": "Actualizar el estado de la orden entre pending, sending y complete",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -787,6 +857,11 @@
             "get": {
                 "summary": "Obtiene la suma de las ventas",
                 "description": "Retorna el valor de venta de todas las ordenes almacenadas",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Devuelve en valor numerico de todas las ventas",
@@ -824,6 +899,11 @@
             "get": {
                 "summary": "Obtiene el total de todas las ordenes",
                 "description": "Retorna el valor de toda las ordenes almacenadas de la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Devuelve en valor numerico del total de ordenes",
@@ -856,6 +936,11 @@
             "get": {
                 "summary": "Obtener los pedidos de un usuario",
                 "description": "Retorna todas las ordenes realizadas por un usuario",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "userid",
@@ -898,6 +983,11 @@
             "get": {
                 "summary": "Obtiene todos los usuario",
                 "description": "Retorna todos los usuarios de la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Lista todos los usuarios",
@@ -931,6 +1021,11 @@
                 "summary": "Crea una nuevo usuario",
                 "description": "Crea un usuario y lo guarda en la base de datos",
                 "operationId": "addCUser",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -972,6 +1067,11 @@
             "get": {
                 "summary": "Obtiene un usuario por ID",
                 "description": "Retorn un usuario por ID",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -1012,6 +1112,11 @@
             "put": {
                 "summary": "Actualiza un usuario por ID",
                 "description": "Actualiza un usuario almacenado en la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -1065,6 +1170,11 @@
             "delete": {
                 "summary": "Borrar un usuario por ID",
                 "description": "Borra un usuario de la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "id",
@@ -1100,6 +1210,11 @@
             "get": {
                 "summary": "Obtener el número de usuarios",
                 "description": "Retorna el número de usuarios registrados en la base de datos",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Retorna un entero",
@@ -1113,6 +1228,48 @@
                     },
                     "404": {
                         "description": "Ocurrió un problema con el conteo"
+                    },
+                    "500": {
+                        "description": "Error internal server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/register":{
+            "post": {
+                "summary": "Register usuario",
+                "description": "Ingresa las credenciales para registrarse a la plataforma",
+                "operationId": "registerCUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewRegister"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario registrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Email incorrecto | contraseña incorrecta"
                     },
                     "500": {
                         "description": "Error internal server",
@@ -1190,7 +1347,15 @@
         }
     },
     "components": {
-        "schemas": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Ingrese un token despues de registrarse, pero procure que el usuario sea de role: Admin, por lo que deberá editarlo ese campo en la base de datos"
+            }
+        },
+        "schemas": {            
             "Category": {
                 "allOf": [
                     {
@@ -1433,6 +1598,29 @@
                     }
                 }
             },
+            "NewRegister": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Nombre de usuario",
+                        "nullable": false,
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email del usuario",
+                        "nullable": false,
+                        "example": "JohnDoe@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Contraseña del usuario",
+                        "nullable": false,
+                        "example": "********"
+                    }
+                }
+            },
             "NewUser": {
                 "type": "object",
                 "properties": {
@@ -1460,10 +1648,10 @@
                         "nullable": false,
                         "example": "+573043625637"
                     },
-                    "isAdmin": {
-                        "type": "boolean",
+                    "role": {
+                        "type": "string",
                         "description": "Rol de usuario",
-                        "example": true
+                        "example": "User"
                     },
                     "street": {
                         "type": "string",

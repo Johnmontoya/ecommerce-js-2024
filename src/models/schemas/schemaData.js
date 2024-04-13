@@ -16,26 +16,30 @@ const schemaUser = joi.object({
             'any.required': `El email es requerido`,
             'string.email': `Dirección de correo invalida`
         }),
-    password: joi.string().min(3).required()
+    password: joi.string().min(3)
         .messages({
             'string.min': `La contraseña no debe ser inferior a 3 carácteres`,
-            'string.empty': `Este campo no puede estar vacio`,
-            'any.required': `La contraseña es requerida`
         }),
     phone: joi.string().required()
         .messages({
             'string.empty': `Este campo no puede estar vacio`,
             'any.required': `El número de telefono es requerido con extension`
         }),
-    isAdmin: joi.boolean(),
-    zip: joi.string(),
-    street: joi.string(),
-    apartment: joi.string(),
-    city: joi.string(),
-    country: joi.string()
+    role: joi.string().allow(null, ''),
+    zip: joi.string().allow(null, ''),
+    street: joi.string().allow(null,''),
+    apartment: joi.string().allow(null, ''),
+    city: joi.string().allow(null, ''),
+    country: joi.string().allow(null, '')
 })
 
 const schemaLogin = joi.object({
+    name: joi.string().allow(null, '').messages({
+        'string.min': `El nombre de usuario no debe ser inferior a 3 carácteres`,
+        'string.max': `El nombre de usuario no debe ser superior a 20 carácteres`,
+        'string.empty': `Este campo no puede estar vacio`,
+        'any.required': `El nombre de usuario es requerido`
+    }),
     email: joi.string().min(3).max(35).required().email()
         .messages({
             'string.min': `El email no debe ser inferior a 3 carácteres`,

@@ -7,10 +7,20 @@ require('dotenv').config();
 
 const url = process.env.API_URL
 let user;
+let login;
 beforeEach(async() => {    
     user = await factory.createMany('user', 2, {
         passwordHash: bcrypt.hashSync('pacoelflaco', 10),
+        role: 'Admin'
     });
+
+    login = await request(app)
+        .post(`${url}/users/login`)
+        .set('content-type', "application/json")
+        .send({
+            email: user[0].email,
+            password: 'pacoelflaco'
+        })
 });
 
 
@@ -28,12 +38,13 @@ describe("Users controller", () => {
                 const user = await request(app)
                     .post(`${url}/users`)
                     .set('content-type', "application/json")
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: data.name,
                         email: newEmail.toString(), 
                         password: data.passwordHash,
                         phone: data.phone,
-                        isAdmin: true,
+                        role: data.role,
                         street: data.street,
                         apartment: data.apartment,
                         zip: data.zip,
@@ -54,7 +65,8 @@ describe("Users controller", () => {
             try {
                 const users = await request(app)
                     .get(`${url}/users`)
-                    .set("content-type", "application/json");
+                    .set("content-type", "application/json")
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(users.statusCode).toBe(200);
                 expect(users.body).toHaveProperty('users');
                 expect(users.body.users.length).toBeGreaterThan(0);
@@ -70,7 +82,8 @@ describe("Users controller", () => {
             try {
                 const response = await request(app)
                     .get(`${url}/users/${user[0].id}`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toHaveProperty('user');
             } catch (error) {
@@ -84,6 +97,7 @@ describe("Users controller", () => {
                 const response = await request(app)
                     .get(`${url}/users/639c80ef98284bfdf111ad09}`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 
                 //console.log(categoria.body);
                 expect(response.statusCode).toBe(404);
@@ -100,7 +114,8 @@ describe("Users controller", () => {
             try {
                 const response = await request(app)
                     .get(`${url}/users/get/count`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toHaveProperty('count');
             } catch (error) {
@@ -119,12 +134,13 @@ describe("Users controller", () => {
                 const response = await request(app)
                     .put(`${url}/users/${user[0].id}`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
                     .send({
                         name: data.name,
                         email: data.email,
                         password: data.passwordHash,
                         phone: data.phone,
-                        isAdmin: true,
+                        role: data.role,
                         street: data.street,
                         apartment: data.apartment,
                         zip: data.zip,
@@ -133,7 +149,6 @@ describe("Users controller", () => {
                     });
                 
                 expect(response.statusCode).toBe(200);
-                expect(response.body).toHaveProperty('user');
             } catch (error) {
                 console.error('Error en la prueba:', error);
                 throw error;
@@ -148,12 +163,13 @@ describe("Users controller", () => {
                 const update = await request(app)
                 .put(`${url}/users/639c80ef98284bfdf111ad09}`)
                 .set('content-type', 'application/json')
+                .set('Authorization', `Bearer ${login.body.token}`)
                 .send({
                     name: data.name,
                     email: data.email,
                     password: data.passwordHash,
                     phone: data.phone,
-                    isAdmin: true,
+                    role: data.role,
                     street: data.street,
                     apartment: data.apartment,
                     zip: data.zip,
@@ -206,7 +222,8 @@ describe("Users controller", () => {
             try {
                 const response = await request(app)
                     .delete(`${url}/users/${user[1].id}`)
-                    .set('content-type', 'application/json');
+                    .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`);
                 expect(response.statusCode).toBe(200);
                 expect(response.body).toHaveProperty('message');
             } catch (error) {
@@ -220,6 +237,7 @@ describe("Users controller", () => {
                 const response = await request(app)
                     .delete(`${url}/users/639c80ef98284bfdf111ad09}`)
                     .set('content-type', 'application/json')
+                    .set('Authorization', `Bearer ${login.body.token}`)
             
                 //console.log(categoria.body);
                 expect(response.statusCode).toBe(404);
