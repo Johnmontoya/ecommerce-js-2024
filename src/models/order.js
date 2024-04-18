@@ -41,6 +41,14 @@ const orderSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
+    bill: {
+        preference: {
+            type: String
+        },
+        paymentId: {
+            type: String
+        }
+    },
     dateOrdered: {
         type: Date,
         default: Date.now,
