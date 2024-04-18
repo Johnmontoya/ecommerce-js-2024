@@ -1,3 +1,5 @@
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
 # Ecommerce
 
 Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest para pruebas, documentacion con swagger, pagos con paypal y mercado pago.
@@ -29,8 +31,8 @@ npm install
 Usar la targeta generada por paypal:
 Fecha de expiración y cv pueden ser cualquiera.
 
+#### Credit Card Paypal
 ```
-[label Credit card]
 4005519200000004
 ```
 
@@ -44,9 +46,8 @@ Para el nombre de usuario durante el proceso se puede usar los siguientes:
 - CONT: Pendiente de pago
 - OTHE: Rechazado por error general 
 
+#### Credit Card
 ```
-[label Credit card]
-
 4915 1120 5524 6507
 ccv: 123
 expire: 11/25
