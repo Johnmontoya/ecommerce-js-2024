@@ -34,7 +34,7 @@ Fecha de expiración y cv pueden ser cualquiera.
 4005519200000004
 ```
 
-Para mercado pago se puede usar el siguiente usuario el cuál tiene un monto de 100k pesos, pero si el monto de la compra excede ese valor, se tendrá que usar la tarjeta debito. Para el nombre de usuario se puede usar los siguientes:
+Para el nombre de usuario durante el proceso se puede usar los siguientes:
 - APRO: Pago aprobado
 - EXPI: La fecha de la tarjeta ha expirado
 - FUND: Saldo insuficiente
@@ -46,8 +46,6 @@ Para mercado pago se puede usar el siguiente usuario el cuál tiene un monto de 
 
 ```
 [label Credit card]
-Usuario comprador: TESTUSER1252018646
-Contraseña comprador: lvBARbm7Pk
 
 4915 1120 5524 6507
 ccv: 123
@@ -57,7 +55,8 @@ C.C: 123456789
 
 ```
 
-
+### Nota:
+Para hacer pruebas con mercado pago se debe tener 2 cuentas de prueba, 1 comprador y otro de venta él cuál generará el MERCADO_PAGOKEY que va en el archivo .env
 
 
 [Nodejs]: <https://nodejs.org/en>
