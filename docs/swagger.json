@@ -24,6 +24,7 @@
         "/api/v1/categorias": {
             "get": {
                 "summary": "Obtener todas las categorias",
+                "tags": ["categorias"],              
                 "description": "Retorna toda las categorias guardadas en la base de datos",
                 "responses": {
                     "200": {
@@ -53,6 +54,7 @@
             },
             "post": {
                 "summary": "Crea una nueva categoria",
+                "tags": ["categorias"], 
                 "description": "Crea una categoria y la guarda en la base de datos",
                 "operationId": "addCategory",
                 "security": [
@@ -100,6 +102,7 @@
         "/api/v1/categorias/{id}": {
             "get": {
                 "summary": "Obtiene una categoria por ID",
+                "tags": ["categorias"], 
                 "description": "Retorna una categoria por ID",
                 "parameters": [
                     {
@@ -140,6 +143,7 @@
             },
             "put": {
                 "summary": "Actualiza una categoria por ID",
+                "tags": ["categorias"], 
                 "description": "Actualiza una categoria almacenada en la base de datos",
                 "security": [
                     {
@@ -198,6 +202,7 @@
             },
             "delete": {
                 "summary": "Borrar una categoria por ID",
+                "tags": ["categorias"], 
                 "description": "Borra una categoria de la base de datos",
                 "security": [
                     {
@@ -238,6 +243,7 @@
         "/api/v1/products": {
             "get": {
                 "summary": "Obtiene todos los productos",
+                "tags": ["productos"], 
                 "description": "Retorna todos los productos de la base de datos",
                 "parameters": [
                     {
@@ -294,6 +300,7 @@
             },
             "post": {
                 "summary": "Crea un nuevo producto",
+                "tags": ["productos"], 
                 "description": "Crea un nuevo producto y la guarda en la base de datos",
                 "operationId": "addProduct",
                 "security": [
@@ -341,6 +348,7 @@
         "/api/v1/products/get/count": {
             "get": {
                 "summary": "Obtiene el total de todos los productos",
+                "tags": ["productos"], 
                 "description": "Cuenta el total de productos registrados",  
                 "security": [
                     {
@@ -377,6 +385,7 @@
         "/api/v1/products/get/featured/{count}": {
             "get": {
                 "summary": "Obtiene los productos destacados",
+                "tags": ["productos"], 
                 "description": "Retorna los productos destacados teniendo en cuenta el valor del parametros",
                 "security": [
                     {
@@ -425,6 +434,7 @@
         "/api/v1/products/{id}": {
             "get": {
                 "summary": "Obtiene un producto por ID",
+                "tags": ["productos"], 
                 "description": "Retorna un producto por ID",
                 "parameters": [
                     {
@@ -465,6 +475,7 @@
             },
             "put": {
                 "summary": "Actualiza un producto por ID",
+                "tags": ["productos"], 
                 "description": "Actualiza un producto almacenado en la base de datos",
                 "security": [
                     {
@@ -520,6 +531,7 @@
             },
             "delete": {
                 "summary": "Borrar un producto por ID",
+                "tags": ["productos"], 
                 "description": "Borra un producto de la base de datos",
                 "security": [
                     {
@@ -560,6 +572,7 @@
         "/api/v1/products/gallery-images/{id}": {
             "put": {
                 "summary": "Actualiza el producto con imagenes",
+                "tags": ["productos"], 
                 "description": "Permite subir hasta 10 imagenes y actualizar el producto",
                 "security": [
                     {
@@ -626,6 +639,7 @@
         "/api/v1/orders": {
             "get": {
                 "summary": "Obtiene todas las ordenes registradas",
+                "tags": ["orders"], 
                 "description": "Retorna todas las ordenes almacenadas en la base de datos",
                 "security": [
                     {
@@ -663,6 +677,7 @@
             },
             "post": {
                 "summary": "Crear nueva orden",
+                "tags": ["orders"], 
                 "description": "Crea una nueva orden y la guarda en la base de datos",
                 "operationId": "addOrder",
                 "security": [
@@ -710,6 +725,7 @@
         "/api/v1/orders/{id}": {
             "get": {
                 "summary": "Obtiene una orden por ID",
+                "tags": ["orders"], 
                 "description": "Retorna una orden por ID",
                 "security": [
                     {
@@ -755,6 +771,7 @@
             },
             "delete": {
                 "summary": "Borrar una orden por ID",
+                "tags": ["orders"], 
                 "description": "Borra una orden de la base de datos",
                 "security": [
                     {
@@ -793,6 +810,7 @@
             },
             "put": {
                 "summary": "Actualizar estado",
+                "tags": ["orders"], 
                 "description": "Actualizar el estado de la orden entre pending, sending y complete",
                 "security": [
                     {
@@ -856,6 +874,7 @@
         "/api/v1/orders/get/totalsales": {
             "get": {
                 "summary": "Obtiene la suma de las ventas",
+                "tags": ["orders"], 
                 "description": "Retorna el valor de venta de todas las ordenes almacenadas",
                 "security": [
                     {
@@ -898,6 +917,7 @@
         "/api/v1/orders/get/count": {
             "get": {
                 "summary": "Obtiene el total de todas las ordenes",
+                "tags": ["orders"], 
                 "description": "Retorna el valor de toda las ordenes almacenadas de la base de datos",
                 "security": [
                     {
@@ -935,6 +955,7 @@
         "/api/v1/orders/get/userorders/{userid}": {
             "get": {
                 "summary": "Obtener los pedidos de un usuario",
+                "tags": ["orders"], 
                 "description": "Retorna todas las ordenes realizadas por un usuario",
                 "security": [
                     {
@@ -982,6 +1003,7 @@
         "/api/v1/users": {
             "get": {
                 "summary": "Obtiene todos los usuario",
+                "tags": ["usuarios"], 
                 "description": "Retorna todos los usuarios de la base de datos",
                 "security": [
                     {
@@ -1019,6 +1041,7 @@
             },
             "post": {
                 "summary": "Crea una nuevo usuario",
+                "tags": ["usuarios"], 
                 "description": "Crea un usuario y lo guarda en la base de datos",
                 "operationId": "addCUser",
                 "security": [
@@ -1066,6 +1089,7 @@
         "/api/v1/users/{id}": {
             "get": {
                 "summary": "Obtiene un usuario por ID",
+                "tags": ["usuarios"], 
                 "description": "Retorn un usuario por ID",
                 "security": [
                     {
@@ -1111,6 +1135,7 @@
             },
             "put": {
                 "summary": "Actualiza un usuario por ID",
+                "tags": ["usuarios"], 
                 "description": "Actualiza un usuario almacenado en la base de datos",
                 "security": [
                     {
@@ -1169,6 +1194,7 @@
             },
             "delete": {
                 "summary": "Borrar un usuario por ID",
+                "tags": ["usuarios"], 
                 "description": "Borra un usuario de la base de datos",
                 "security": [
                     {
@@ -1209,6 +1235,7 @@
         "/api/v1/users/get/count": {
             "get": {
                 "summary": "Obtener el número de usuarios",
+                "tags": ["usuarios"], 
                 "description": "Retorna el número de usuarios registrados en la base de datos",
                 "security": [
                     {
@@ -1245,6 +1272,7 @@
         "/api/v1/users/register":{
             "post": {
                 "summary": "Register usuario",
+                "tags": ["usuarios"], 
                 "description": "Ingresa las credenciales para registrarse a la plataforma",
                 "operationId": "registerCUser",
                 "requestBody": {
@@ -1287,6 +1315,7 @@
         "/api/v1/users/login": {
             "post": {
                 "summary": "Login usuario",
+                "tags": ["usuarios"], 
                 "description": "Ingresa las credenciales para acceder a la plataforma",
                 "operationId": "loginCUser",
                 "requestBody": {
