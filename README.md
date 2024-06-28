@@ -2,7 +2,7 @@
 
 # Ecommerce
 
-Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest para pruebas, documentacion con swagger, pagos con paypal y mercado pago.
+Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest para pruebas, documentacion con swagger, pagos con paypal, mercado pago y docker.
 
 
 ## TECNOLOGIAS
@@ -19,6 +19,22 @@ Proyecto basico con nodejs de una api ecommerce, hecho con js y vitejs, con jest
 - [Swagger]
 - [Paypal]
 - [MercadoPago]
+- [Docker]
+
+## VARIABLES DE ENTORNO
+
+- API_URL = /api/v1
+- HOST_URL = 'http://localhost:3000/'
+- SECRET = _tu secret password_
+- CONNECTION_LOCAL = mongodb://localhost:27017/ecommerce-js-2024
+- EMAIL_PORT = _puerto de la app de mensajeria_
+- HOST_EMAIL = _host de la app de mensajeria_
+- EMAIL_USER = _usuario de la app de mensajeria_
+- EMAIL_PASSWORD = _password de la app de mensajeria_
+- PAYPAL_CLIENTID = _clave cliente de paypal developer_
+- PAYPAL_SECRET = _clave secreta de paypal developer_
+- MERCADO_PAGOKEY = _clave de prueba de mercado pago developer_
+- CONNECTION_DOCKER = mongodb://mongodb:27017/ecommerce-js-2024
 
 ## INSTALACION
 
@@ -26,6 +42,13 @@ Versión utilizada de Node (20.11)
 ```
 cd backend
 npm install
+```
+
+Luego de la instalacion 
+
+```
+npm build
+npm start
 ```
 
 Usar la targeta generada por paypal:
@@ -59,6 +82,23 @@ C.C: 123456789
 ### Nota:
 Para hacer pruebas con mercado pago se debe tener 2 cuentas de prueba, 1 comprador y otro de venta él cuál generará el MERCADO_PAGOKEY que va en el archivo .env
 
+# Instrucciones para Docker
+Si quieres usar docker, sigue estos pasos:
+- Descarga docker: [Docker].
+
+Cambia la variable local usada en /config/dbMongoConnection.js por CONNECTION_DOCKER:
+
+```
+mongoose.connect(process.env.CONNECTION_DOCKER, {
+    dbName: 'ecommerce-js-2024',
+})
+```
+
+Corre el comando:
+
+```
+docker compose up --build -d
+```
 
 [Nodejs]: <https://nodejs.org/en>
 [Express]: <https://expressjs.com/>
@@ -72,3 +112,4 @@ Para hacer pruebas con mercado pago se debe tener 2 cuentas de prueba, 1 comprad
 [Swagger]: <https://swagger.io/>
 [Paypal]: <https://www.npmjs.com/package/paypal-rest-sdk>
 [MercadoPago]: <https://www.npmjs.com/package/mercadopago>
+[Docker]: <https://www.docker.com/get-started/>
