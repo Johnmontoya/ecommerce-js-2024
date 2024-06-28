@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-mongoose.connect(process.env.CONNECTION_STRING, {
+mongoose.connect(process.env.CONNECTION_DOCKER, {
     dbName: 'ecommerce-js',
 })
 .then(() => {

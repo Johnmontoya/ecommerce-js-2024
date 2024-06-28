@@ -1,5 +1,5 @@
-const app = require('./src/app');
-require('./config/dbMongoConnection');
+const app = require('./app');
+require('../config/dbMongoConnection');
 
 const port = process.env.PORT || 3000;
 
